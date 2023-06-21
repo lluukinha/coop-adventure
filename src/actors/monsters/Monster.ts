@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { ANCHOR_CENTER, DOWN, EVENT_NETWORK_MONSTER_UPDATE, LEFT, PAIN, RIGHT, SCALE, SCALE_2x, TAG_ANY_PLAYER, TAG_DAMAGES_PLAYER, TAG_PLAYER_WEAPON, UP, WALK } from "../../constants";
+import { ANCHOR_CENTER, DOWN, EVENT_NETWORK_MONSTER_UPDATE, EVENT_SEND_MONSTER_UPDATE, LEFT, PAIN, RIGHT, SCALE, SCALE_2x, TAG_ANY_PLAYER, TAG_DAMAGES_PLAYER, TAG_PLAYER_WEAPON, UP, WALK } from "../../constants";
 import { guidGenerator, randomFromArray } from "../../helpers";
 import { IAnimationPayload, IPainState, generateMonsterAnimations } from "../../character-animations";
 import { Player } from "../players/Player";
@@ -57,7 +57,14 @@ export class Monster extends ex.Actor {
         void this.queryForTarget();
 
         // Send network updates
-        this.networkUpdater = new NetworkUpdater(_engine, EVENT_NETWORK_MONSTER_UPDATE);
+        this.networkUpdater = new NetworkUpdater(_engine, EVENT_SEND_MONSTER_UPDATE);
+    }
+
+    createNetworkUpdateString() : string {
+        const hasPainState = !!this.painState;
+        const x = Math.round(this.pos.x);
+        const y = Math.round(this.pos.y);
+        return `MONSTER|${this.networkId}|${x}|${y}|${this.vel.x}|${this.vel.y}|${this.facing}|${hasPainState}|${this.hp}`;
     }
 
     onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
@@ -81,6 +88,10 @@ export class Monster extends ex.Actor {
             this.kill();
             const explosion = new Explosion(this.pos.x, this.pos.y);
             this.scene.engine.add(explosion);
+
+            // Emit that we died. It matters otherwise other players don't hear about HP being 0
+            const networkUpdateString = this.createNetworkUpdateString();
+            this.networkUpdater?.sendStateUpdate(networkUpdateString);
             return;
         }
 
@@ -138,7 +149,13 @@ export class Monster extends ex.Actor {
 
     onPreUpdate(_engine: ex.Engine, _delta: number): void {
         this.onPreUpdateMove(_delta);
+
+        // Show correct appearance
         this.onPreUpdateAnimation();
+
+        // Update everybody
+        const networkUpdateString = this.createNetworkUpdateString();
+        this.networkUpdater?.sendStateUpdate(networkUpdateString);
     }
 
     onPreUpdateMove(_delta: number) {

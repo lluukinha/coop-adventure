@@ -21,7 +21,7 @@
 // `
 
 import * as ex from "excalibur";
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH, SCALE, EVENT_SEND_PLAYER_UPDATE, TAG_ANY_PLAYER } from "./constants";
+import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH, SCALE, EVENT_SEND_PLAYER_UPDATE, TAG_ANY_PLAYER, EVENT_SEND_MONSTER_UPDATE } from "./constants";
 import { Player } from "./actors/players/Player";
 // import { Floor } from "./actors/players/Floor";
 import { loader } from "./resources";
@@ -58,6 +58,10 @@ game.on("initialize", () => {
   new NetworkActorsMap(game);
   const peer = new NetworkClient(game);
   game.on(EVENT_SEND_PLAYER_UPDATE, (update) => {
+    peer.sendUpdate(update as unknown as string);
+  });
+
+  game.on(EVENT_SEND_MONSTER_UPDATE, (update) => {
     peer.sendUpdate(update as unknown as string);
   });
 })

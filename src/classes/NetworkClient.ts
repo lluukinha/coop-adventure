@@ -1,7 +1,7 @@
 import * as ex from "excalibur";
 import { guidGenerator } from "../helpers";
 import Peer, { DataConnection } from "peerjs";
-import { EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
+import { EVENT_NETWORK_MONSTER_UPDATE, EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
 
 const PORT = 9002;
 
@@ -99,6 +99,13 @@ export class NetworkClient {
     }
 
     handleIncomingData(conn: DataConnection, data: unknown) {
+        // Handle MONSTER updates (detect by prefix)
+        if ((data as string).startsWith("MONSTER")) {
+            this.engine.emit(EVENT_NETWORK_MONSTER_UPDATE, data as string);
+            return;
+        }
+
+        // Handle PLAYER prefix
         this.engine.emit(EVENT_NETWORK_PLAYER_UPDATE, {
             id: conn.peer,
             data

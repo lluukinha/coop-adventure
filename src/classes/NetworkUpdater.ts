@@ -13,7 +13,6 @@ export class NetworkUpdater {
 
     sendStateUpdate(newString: string) {
         if (this.previousString === newString) return;
-        // console.log({ newString });
         this.engine.emit(this.eventType, newString);
         this.previousString = newString;
     }

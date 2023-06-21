@@ -1,6 +1,7 @@
 import * as ex from "excalibur";
-import { EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
+import { EVENT_NETWORK_MONSTER_UPDATE, EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
 import { NetworkPlayer } from "../actors/players/NetworkPlayer";
+import { NetworkMonster } from "../actors/monsters/NetworkMonster";
 
 interface INetworkPlayerData {
     id: string;
@@ -16,6 +17,10 @@ export class NetworkActorsMap {
 
         this.engine.on(EVENT_NETWORK_PLAYER_UPDATE, otherPlayer => {
             this.onUpdatedPlayer(otherPlayer as unknown as INetworkPlayerData);
+        });
+
+        this.engine.on(EVENT_NETWORK_MONSTER_UPDATE, otherMonsterDataString => {
+            this.onUpdatedMonster(otherMonsterDataString as unknown as string);
         });
 
         this.engine.on(EVENT_NETWORK_PLAYER_LEAVE, (playerId) => {
@@ -56,5 +61,32 @@ export class NetworkActorsMap {
             actorToRemove.kill();
         }
         this.playerMap.delete(id);
+    }
+
+    getMonsterStateUpdate(data: string) {
+        const [ _type, networkId, x, y, _velX, _velY, facing, hasPainState, hp ] = data.split("|");
+        return {
+            _type,
+            networkId,
+            x: Number(x),
+            y: Number(y),
+            velX: hasPainState === "true" ? Number(_velX) : 0,
+            velY: hasPainState === "true" ? Number(_velY) : 0,
+            facing,
+            isInPain: hasPainState === "true",
+            hp: Number(hp)
+        };
+    }
+
+    onUpdatedMonster(monsterData: string) {
+        const { networkId, x, y, facing, isInPain, hp } = this.getMonsterStateUpdate(monsterData);
+        let networkMonster: NetworkMonster = this.playerMap.get(networkId);
+        if (!networkMonster) {
+            networkMonster = new NetworkMonster(x, y);
+            this.playerMap.set(networkId, networkMonster);
+            this.engine.add(networkMonster);
+        }
+
+        networkMonster.onStateUpdate({ x, y, facing, isInPain, hp });
     }
 }
