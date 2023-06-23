@@ -1,7 +1,7 @@
 import * as ex from "excalibur";
 import { guidGenerator } from "../helpers";
 import Peer, { DataConnection } from "peerjs";
-import { EVENT_NETWORK_MONSTER_UPDATE, EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
+import { EVENT_INITIAL_DATA_REQUESTED, EVENT_NETWORK_MONSTER_UPDATE, EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
 
 const PORT = 9002;
 
@@ -38,6 +38,7 @@ export class NetworkClient {
             // A new playeer has connected to me
             conn.on("open", () => {
                 this.connectionMap.set(conn.peer, conn);
+                this.engine.emit(EVENT_INITIAL_DATA_REQUESTED, this.peerId);
             });
 
             // Know when its closed
@@ -75,6 +76,7 @@ export class NetworkClient {
         // Register to each player I know about
         conn.on("open", () => {
           this.connectionMap.set(id, conn);
+          this.engine.emit(EVENT_INITIAL_DATA_REQUESTED, conn.peer);
         });
 
         // Know when it's closed

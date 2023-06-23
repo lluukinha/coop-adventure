@@ -24,7 +24,6 @@ export class NetworkPlayer extends Player {
 
   // Redefine internal object of animations when the skinId changes
   regenAnimations(newSkinId: string) {
-    console.log("skin changed to " + newSkinId);
     this.skinId = newSkinId;
     this.skinAnimations = generateCharacterAnimations(this.skinId);
   }

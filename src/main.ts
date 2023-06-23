@@ -21,7 +21,7 @@
 // `
 
 import * as ex from "excalibur";
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH, SCALE, EVENT_SEND_PLAYER_UPDATE, TAG_ANY_PLAYER, EVENT_SEND_MONSTER_UPDATE } from "./constants";
+import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH, SCALE, EVENT_SEND_PLAYER_UPDATE, TAG_ANY_PLAYER, EVENT_SEND_MONSTER_UPDATE, EVENT_INITIAL_DATA_REQUESTED } from "./constants";
 import { Player } from "./actors/players/Player";
 // import { Floor } from "./actors/players/Floor";
 import { loader } from "./resources";
@@ -29,7 +29,6 @@ import { MAP_INDOOR } from "./maps/Map_Indoor";
 import { Player_CameraStrategy } from "./classes/Player_CameraStrategy";
 import { NetworkClient } from "./classes/NetworkClient";
 import { NetworkActorsMap } from "./classes/NetworkActorsMap";
-import { Monster } from "./actors/monsters/Monster";
 
 const game = new ex.Engine({
   width: VIEWPORT_WIDTH * SCALE,
@@ -61,6 +60,10 @@ game.on("initialize", () => {
     peer.sendUpdate(update as unknown as string);
   });
 
+  game.on(EVENT_INITIAL_DATA_REQUESTED, () => {
+    peer.sendUpdate(player.createNetworkUpdateString());
+  });
+
   game.on(EVENT_SEND_MONSTER_UPDATE, (update) => {
     peer.sendUpdate(update as unknown as string);
   });
@@ -68,16 +71,16 @@ game.on("initialize", () => {
 
 game.start(loader);
 
-const createAddMonsterButton = () => {
-  const button = document.createElement("button");
-  button.style.display = "block";
-  button.innerText = "ADD MONSTER";
-  button.onclick = () => {
-    const monster = new Monster(100 ,100);
-    game.add(monster);
-  }
+// const createAddMonsterButton = () => {
+//   const button = document.createElement("button");
+//   button.style.display = "block";
+//   button.innerText = "ADD MONSTER";
+//   button.onclick = () => {
+//     const monster = new Monster(100 ,100);
+//     game.add(monster);
+//   }
 
-  document.body.append(button);
-}
+//   document.body.append(button);
+// }
 
-createAddMonsterButton();
+// createAddMonsterButton();

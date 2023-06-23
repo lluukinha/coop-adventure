@@ -61,6 +61,12 @@ export class Player extends ex.Actor {
         this.playerAnimations = new PlayerAnimations(this);
         this.playerActions = new PlayerActions(this);
         this.networkUpdater = new NetworkUpdater(_engine, EVENT_SEND_PLAYER_UPDATE);
+        this.sendUpdate();
+    }
+
+    sendUpdate() : void {
+        const networkUpdateString = this.createNetworkUpdateString();
+        this.networkUpdater?.sendStateUpdate(networkUpdateString);
     }
 
     onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
@@ -132,8 +138,7 @@ export class Player extends ex.Actor {
         this.playerAnimations?.showRelevantAnimation();
 
         // Update everybody else
-        const networkUpdateString = this.createNetworkUpdateString();
-        this.networkUpdater?.sendStateUpdate(networkUpdateString);
+        this.sendUpdate()
     }
 
     onPreUpdateMovement(_engine: ex.Engine, _delta: number): void {
@@ -189,18 +194,31 @@ export class Player extends ex.Actor {
             return;
         }
 
-        PLAYERS.forEach(({ key, skinId }) => {
+        for(let i: number = 0; i < PLAYERS.length; i++){
+            const { key, skinId } = PLAYERS[i];
             if (_engine.input.keyboard.wasPressed(key)) {
                 this.skinId = skinId;
                 this.skinAnimations = generateCharacterAnimations(this.skinId);
             }
-        });
-
-        if (_engine.input.keyboard.wasPressed(ex.Input.Keys.Space)) {
-            // TAKE DAMAGE
-            this.takeDamage();
-            return;
         }
+
+        // PLAYERS.forEach(({ key, skinId }) => {
+        //     if (_engine.input.keyboard.wasPressed(key)) {
+        //         this.skinId = skinId;
+        //         this.skinAnimations = generateCharacterAnimations(this.skinId);
+        //     }
+        // });
+
+        if (_engine.input.keyboard.wasPressed(ex.Input.Keys.M)) {
+            const monster = new Monster(100, 100);
+            _engine.add(monster);
+        }
+
+        // if (_engine.input.keyboard.wasPressed(ex.Input.Keys.Space)) {
+        //     // TAKE DAMAGE
+        //     this.takeDamage();
+        //     return;
+        // }
 
         return;
     }

@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { EVENT_NETWORK_MONSTER_UPDATE, EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
+import { EVENT_INITIAL_DATA_REQUESTED, EVENT_NETWORK_MONSTER_UPDATE, EVENT_NETWORK_PLAYER_LEAVE, EVENT_NETWORK_PLAYER_UPDATE } from "../constants";
 import { NetworkPlayer } from "../actors/players/NetworkPlayer";
 import { NetworkMonster } from "../actors/monsters/NetworkMonster";
 

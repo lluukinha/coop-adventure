@@ -1,8 +1,10 @@
 import * as ex from "excalibur";
 
-import { DOWN, PAIN, SCALE_2x, TAG_DAMAGES_PLAYER, WALK } from "../../constants.js";
+import { DOWN, PAIN, SCALE_2x, TAG_DAMAGES_PLAYER, TAG_PLAYER_WEAPON, WALK } from "../../constants.js";
 import { Explosion } from "../Explosion.js";
 import { IAnimationPayload, generateMonsterAnimations } from "../../character-animations.js";
+import { Arrow } from "../weapons/Arrow.js";
+import { Sword } from "../weapons/Sword.js";
 
  // Note this class simply shows a known Monster which is controlled by another player.
  export class NetworkMonster extends ex.Actor {
@@ -20,11 +22,22 @@ import { IAnimationPayload, generateMonsterAnimations } from "../../character-an
      this.hasGhostPainState = false;
      this.facing = DOWN;
      this.animations = generateMonsterAnimations();
+     this.on("collisionstart", (event: ex.CollisionStartEvent<ex.Actor>) => {
+      this.onCollisionStart(event);
+    })
    }
 
    onInitialize(_engine: ex.Engine) {
      this.addTag(TAG_DAMAGES_PLAYER);
    }
+
+   onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
+    if (event.other.hasTag(TAG_PLAYER_WEAPON)) {
+        const weapon = event.other as (Sword | Arrow);
+        if (weapon.isKilled() || weapon.isUsed) return;
+        weapon.onDamagedSomething();
+    }
+}
 
    tookFinalDamage() {
      // Replace me with an explosion when owner client reports I am out of HP

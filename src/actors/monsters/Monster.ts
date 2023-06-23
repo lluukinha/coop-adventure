@@ -43,7 +43,7 @@ export class Monster extends ex.Actor {
 
         this.on("collisionstart", (event: ex.CollisionStartEvent<ex.Actor>) => {
             this.onCollisionStart(event);
-        })
+        });
     }
 
     onInitialize(_engine: ex.Engine): void {

@@ -1,5 +1,9 @@
 import * as ex from "excalibur";
-import { ANCHOR_TOP_LEFT, SCALE, SCALE_2x } from "../constants";
+import { ANCHOR_TOP_LEFT, SCALE, SCALE_2x, TAG_DAMAGES_PLAYER, TAG_PLAYER_WEAPON } from "../constants";
+import { Monster } from "./monsters/Monster";
+import { Player } from "./players/Player";
+import { Arrow } from "./weapons/Arrow";
+import { Sword } from "./weapons/Sword";
 
 export class Floor extends ex.Actor {
     constructor(x: number, y: number, cols: number, rows: number) {
@@ -17,5 +21,15 @@ export class Floor extends ex.Actor {
         });
 
         this.graphics.opacity = 0.0;
+        this.on("collisionstart", (event) => this.onCollisionStart(event));
+    }
+
+    onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
+        // Take damage from other players weapons
+        if (event.other.hasTag(TAG_PLAYER_WEAPON)) {
+            const weapon = event.other as Sword | Arrow;
+            weapon.onDamagedSomething();
+            return;
+        }
     }
 }
