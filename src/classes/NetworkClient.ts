@@ -8,7 +8,7 @@ import {
   EVENT_NETWORK_PLAYER_UPDATE,
 } from '../constants';
 
-// const PORT = 9002;
+const PORT = 9002;
 
 // const LOCALHOST_CONFIG = {
 //     host: "localhost",
@@ -21,6 +21,7 @@ import {
 
 const PRODUCTION_CONFIG = {
   host: 'peerjs-server-rust.vercel.app',
+  port: PORT,
   key: 'demodemo',
   path: '/myapp',
   secure: true,
