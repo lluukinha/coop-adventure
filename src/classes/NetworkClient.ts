@@ -43,7 +43,7 @@ export class NetworkClient {
 
   async init() {
     this.peer.on('error', (err) => {
-      console.log(err.message);
+      console.log('PeerJS connection error:', err);
     });
 
     // Be ready to hear from incoming connections
