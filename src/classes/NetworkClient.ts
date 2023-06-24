@@ -26,7 +26,7 @@ const PRODUCTION_CONFIG = {
   secure: true,
 };
 
-const PRODUCTION_URL = `https://peerjs-server-rust.vercel.app/`;
+const PRODUCTION_URL = `https://peerjs-server-rust.vercel.app`;
 
 export class NetworkClient {
   public engine: ex.Engine;
