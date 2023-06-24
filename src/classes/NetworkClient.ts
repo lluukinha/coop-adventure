@@ -20,13 +20,13 @@ import {
 // const LOCALHOST_URL = `http://localhost:${PORT}`;
 
 const PRODUCTION_CONFIG = {
-  host: 'peerjs-server-2jakyffcz-lluukinha.vercel.app',
+  host: 'peerjs-server-rust.vercel.app',
   key: 'demodemo',
   path: '/myapp',
   secure: true,
 };
 
-const PRODUCTION_URL = `https://peerjs-server-2jakyffcz-lluukinha.vercel.app`;
+const PRODUCTION_URL = `https://peerjs-server-rust.vercel.app/`;
 
 export class NetworkClient {
   public engine: ex.Engine;
