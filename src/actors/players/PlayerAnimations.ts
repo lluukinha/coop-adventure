@@ -1,5 +1,4 @@
 import { PAIN, WALK } from "../../constants";
-import { NetworkPlayer } from "./NetworkPlayer";
 import { Player } from "./Player";
 
 export class PlayerAnimations {
@@ -21,7 +20,7 @@ export class PlayerAnimations {
         const { actor } = this;
 
         // Always prioritize showing PAIN if we are in pain
-        if ((actor as NetworkPlayer).hasGhostPainState && !!actor.painState) {
+        if (!!actor.painState) {
             actor.graphics.use(actor.skinAnimations[actor.facing][PAIN]);
             return;
         }
