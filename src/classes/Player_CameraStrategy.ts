@@ -1,14 +1,14 @@
 import * as ex from "excalibur";
 import { Player } from "../actors/players/Player";
-import { GameMap } from "../maps/GameMap";
 import { SCALE } from "../constants";
+import { TiledMapResource } from "@excaliburjs/plugin-tiled";
 
 export class Player_CameraStrategy {
     public target: Player;
-    public map: GameMap;
+    public map: TiledMapResource;
     public position: ex.Vector;
 
-    constructor(target: Player, map: GameMap) {
+    constructor(target: Player, map: TiledMapResource) {
         this.target = target;
         this.map = map;
         this.position = new ex.Vector(this.target.pos.x, this.target.pos.y);
@@ -24,13 +24,14 @@ export class Player_CameraStrategy {
         }
 
         // Limits
-        const R_LIMIT = this.map.tileWidth * SCALE * 16 - 7 * SCALE * 16;
+        const { tileWidth, tileHeight, width, height } = this.map.data;
+        const R_LIMIT = (tileWidth * width) * SCALE * 16 - 7 * SCALE * 16;
         this.position.x = this.position.x > R_LIMIT ? R_LIMIT : this.position.x;
 
         const L_LIMIT = 8 * SCALE * 16;
         this.position.x = this.position.x < L_LIMIT ? L_LIMIT : this.position.x;
 
-        const D_LIMIT = this.map.tileHeight * SCALE * 16 - 5 * SCALE * 16;
+        const D_LIMIT = (tileHeight * height) * SCALE - 5 * SCALE * 16;
         this.position.y = this.position.y > D_LIMIT ? D_LIMIT : this.position.y;
 
         const U_LIMIT = 7 * SCALE * 16;

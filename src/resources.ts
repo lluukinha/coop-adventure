@@ -1,3 +1,4 @@
+import { TiledMapResource } from "@excaliburjs/plugin-tiled";
 import * as ex from "excalibur";
 
 const Images: { [key: string]: ex.ImageSource } = {
@@ -10,9 +11,6 @@ const Images: { [key: string]: ex.ImageSource } = {
     // Monsters
     monsterSheetImage: new ex.ImageSource("/sprites/monster-sheet.png"),
 
-    // Maps
-    indoorImage: new ex.ImageSource("/maps/indoor.png"),
-
     // Weapons
     swordSheetImage: new ex.ImageSource("/sprites/sword-sheet.png"),
     arrowSheetImage: new ex.ImageSource("/sprites/arrow-sheet.png"),
@@ -21,16 +19,18 @@ const Images: { [key: string]: ex.ImageSource } = {
     explosionSheetImage: new ex.ImageSource("/sprites/explosion-sheet.png")
 };
 
-const Sounds: { [key: string]: ex.ImageSource } = {
+const Sounds: { [key: string]: ex.ImageSource } = {}
 
+const Maps: { [key: string]: TiledMapResource } = {
+    tiledMap: new TiledMapResource("/maps/map.tmx")
 }
 
 const loader = new ex.Loader();
 loader.suppressPlayButton = true;
-const allResources = { ...Images, ...Sounds };
+const allResources = { ...Images, ...Maps, ...Sounds };
 
 for (const res in allResources) {
     loader.addResource(allResources[res]);
 }
 
-export { loader, Images, Sounds };
+export { loader, Images, Maps, Sounds };

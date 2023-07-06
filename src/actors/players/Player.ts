@@ -1,12 +1,11 @@
 import * as ex from "excalibur";
-import { ANCHOR_CENTER, DOWN, EVENT_SEND_PLAYER_UPDATE, LEFT, RIGHT, SCALE_2x, TAG_ANY_PLAYER, TAG_DAMAGES_PLAYER, TAG_PLAYER_WEAPON, UP, WALK } from "../../constants";
+import { ANCHOR_CENTER, DOWN, LEFT, RIGHT, SCALE_2x, TAG_ANY_PLAYER, TAG_DAMAGES_PLAYER, TAG_PLAYER_WEAPON, UP, WALK } from "../../constants";
 // import { DrawShapeHelper } from "../../classes/DrawShapeHelper";
 import { IAnimationPayload, IPainState, generateCharacterAnimations } from "../../character-animations";
 import { PlayerAnimations } from "./PlayerAnimations";
 import { SpriteSequence } from "../../classes/SpriteSequence";
 import { DirectionQueue } from "../../classes/DirectionQueue";
 import { PlayerActions } from "./PlayerActions";
-import { NetworkUpdater } from "../../classes/NetworkUpdater";
 import { Arrow } from "../weapons/Arrow";
 import { Sword } from "../weapons/Sword";
 import { Monster } from "../monsters/Monster";
@@ -32,15 +31,14 @@ export class Player extends ex.Actor {
     public actionAnimation: SpriteSequence | null;
     public isPainFlashing: boolean;
     public painState: IPainState | null;
-    public networkUpdater: NetworkUpdater | undefined;
 
     constructor(x: number, y: number, skinId: string) {
         super({
             pos: new ex.Vector(x, y),
-            width: 32,
-            height: 32,
+            width: 16,
+            height: 16,
             scale: SCALE_2x,
-            collider: ex.Shape.Box(15, 15, ANCHOR_CENTER, new ex.Vector(0, 6)),
+            collider: ex.Shape.Box(15, 13, ANCHOR_CENTER, new ex.Vector(0, 6)),
             collisionType: ex.CollisionType.Active,
             color: ex.Color.Green
         });
@@ -53,20 +51,13 @@ export class Player extends ex.Actor {
         this.graphics.use(this.skinAnimations[this.facing][WALK]);
         this.isPainFlashing = false;
         this.painState = null;
-        this.addTag(TAG_ANY_PLAYER);
         this.on("collisionstart", (event) => this.onCollisionStart(event));
     }
 
     onInitialize(_engine: ex.Engine): void {
         this.playerAnimations = new PlayerAnimations(this);
         this.playerActions = new PlayerActions(this);
-        this.networkUpdater = new NetworkUpdater(_engine, EVENT_SEND_PLAYER_UPDATE);
-        this.sendUpdate();
-    }
-
-    sendUpdate() : void {
-        const networkUpdateString = this.createNetworkUpdateString();
-        this.networkUpdater?.sendStateUpdate(networkUpdateString);
+        this.addTag(TAG_ANY_PLAYER);
     }
 
     onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
@@ -85,15 +76,6 @@ export class Player extends ex.Actor {
             console.log('enemy collided')
             this.takeDamage((event.other as Monster).facing);
         }
-    }
-
-    // Concats enough state to send to other players
-    createNetworkUpdateString() {
-        const actionType = this.actionAnimation?.type ?? "NULL";
-        const isInPain = !!this.painState;
-        const x = Math.round(this.pos.x);
-        const y = Math.round(this.pos.y);
-        return `${actionType}|${x}|${y}|${this.vel.x}|${this.vel.y}|${this.skinId}|${this.facing}|${isInPain}|${this.isPainFlashing}`;
     }
 
     calculateOppositeDirection(direction: string) : string {
@@ -136,9 +118,6 @@ export class Player extends ex.Actor {
 
         // Show the right frames
         this.playerAnimations?.showRelevantAnimation();
-
-        // Update everybody else
-        this.sendUpdate()
     }
 
     onPreUpdateMovement(_engine: ex.Engine, _delta: number): void {
@@ -155,7 +134,7 @@ export class Player extends ex.Actor {
         }
 
         const keyboard = _engine.input.keyboard;
-        const WALKING_SPEED = 160;
+        const WALKING_SPEED = 100;
 
         this.vel.x = 0;
         this.vel.y = 0;
@@ -202,24 +181,5 @@ export class Player extends ex.Actor {
             }
         }
 
-        // PLAYERS.forEach(({ key, skinId }) => {
-        //     if (_engine.input.keyboard.wasPressed(key)) {
-        //         this.skinId = skinId;
-        //         this.skinAnimations = generateCharacterAnimations(this.skinId);
-        //     }
-        // });
-
-        if (_engine.input.keyboard.wasPressed(ex.Input.Keys.M)) {
-            const monster = new Monster(100, 100);
-            _engine.add(monster);
-        }
-
-        // if (_engine.input.keyboard.wasPressed(ex.Input.Keys.Space)) {
-        //     // TAKE DAMAGE
-        //     this.takeDamage();
-        //     return;
-        // }
-
-        return;
     }
 }

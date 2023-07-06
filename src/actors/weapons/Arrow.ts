@@ -12,7 +12,7 @@ import {
 import { Player } from "../players/Player.js";
 
 const arrowSpriteSheet = ex.SpriteSheet.fromImageSource({
-  image: Images.arrowSheetImage,
+  image: Images.arrowSheetImage as ex.ImageSource,
   grid: {
     columns: 1,
     rows: 4,

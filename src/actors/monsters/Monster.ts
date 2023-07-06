@@ -2,7 +2,6 @@ import * as ex from 'excalibur';
 import {
   ANCHOR_CENTER,
   DOWN,
-  EVENT_SEND_MONSTER_UPDATE,
   LEFT,
   PAIN,
   RIGHT,
@@ -14,31 +13,28 @@ import {
   UP,
   WALK,
 } from '../../constants';
-import { guidGenerator, randomFromArray } from '../../helpers';
+import { randomFromArray } from '../../helpers';
 import {
   IAnimationPayload,
   IPainState,
   generateMonsterAnimations,
 } from '../../character-animations';
 import { Player } from '../players/Player';
-import { NetworkUpdater } from '../../classes/NetworkUpdater';
 import { Sword } from '../weapons/Sword';
 import { Arrow } from '../weapons/Arrow';
 import { Explosion } from '../Explosion';
 
-const MONSTER_WALK_VELOCITY = 30;
-const MONSTER_CHASE_VELOCITY = 65;
-const MONSTER_DETECT_PLAYER_RANGE = 150;
+const MONSTER_WALK_VELOCITY = 15;
+const MONSTER_CHASE_VELOCITY = 35;
+const MONSTER_DETECT_PLAYER_RANGE = 50;
 
 export class Monster extends ex.Actor {
-  public networkId: string;
   public painState: IPainState | null;
   public roamingPoint?: ex.Vector | null;
   public target: Player | null;
   public hp: number;
   public facing: string;
   public animations: IAnimationPayload;
-  public networkUpdater: NetworkUpdater | undefined;
 
   constructor(x: number, y: number) {
     super({
@@ -50,7 +46,6 @@ export class Monster extends ex.Actor {
       collisionType: ex.CollisionType.Active,
     });
 
-    this.networkId = guidGenerator();
     this.painState = null;
 
     this.roamingPoint = null;
@@ -73,19 +68,6 @@ export class Monster extends ex.Actor {
 
     // Periodically query for a new target
     void this.queryForTarget();
-
-    // Send network updates
-    this.networkUpdater = new NetworkUpdater(
-      _engine,
-      EVENT_SEND_MONSTER_UPDATE
-    );
-  }
-
-  createNetworkUpdateString(): string {
-    const hasPainState = !!this.painState;
-    const x = Math.round(this.pos.x);
-    const y = Math.round(this.pos.y);
-    return `MONSTER|${this.networkId}|${x}|${y}|${this.vel.x}|${this.vel.y}|${this.facing}|${hasPainState}|${this.hp}`;
   }
 
   onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
@@ -109,10 +91,6 @@ export class Monster extends ex.Actor {
       this.kill();
       const explosion = new Explosion(this.pos.x, this.pos.y);
       this.scene.engine.add(explosion);
-
-      // Emit that we died. It matters otherwise other players don't hear about HP being 0
-      const networkUpdateString = this.createNetworkUpdateString();
-      this.networkUpdater?.sendStateUpdate(networkUpdateString);
       return;
     }
 
@@ -141,9 +119,7 @@ export class Monster extends ex.Actor {
     // If we don't have a valid target
     if (!this.target || this.target?.isKilled()) {
       // Query all players on the map
-      const playersQuery = this.scene.world.queryManager.getQuery([
-        TAG_ANY_PLAYER,
-      ]);
+      const playersQuery = this.scene.world.queryManager.getQuery([TAG_ANY_PLAYER]);
       // Filter down to nearby ones within pixel range
       const nearbyPlayers = playersQuery
         .getEntities()
@@ -177,10 +153,6 @@ export class Monster extends ex.Actor {
 
     // Show correct appearance
     this.onPreUpdateAnimation();
-
-    // Update everybody
-    const networkUpdateString = this.createNetworkUpdateString();
-    this.networkUpdater?.sendStateUpdate(networkUpdateString);
   }
 
   onPreUpdateMove(_delta: number) {
