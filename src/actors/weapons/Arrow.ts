@@ -1,15 +1,17 @@
-import * as ex from "excalibur";
-import { Images } from "../../resources.js";
+import * as ex from 'excalibur';
+import { Images } from '../../resources.js';
 import {
+  ANCHOR_CENTER,
   DOWN,
   LEFT,
   RIGHT,
   SCALE,
   SCALE_2x,
   TAG_PLAYER_WEAPON,
+  TAG_WALL,
   UP,
-} from "../../constants.js";
-import { Player } from "../players/Player.js";
+} from '../../constants.js';
+import { Player } from '../players/Player.js';
 
 const arrowSpriteSheet = ex.SpriteSheet.fromImageSource({
   image: Images.arrowSheetImage as ex.ImageSource,
@@ -38,6 +40,8 @@ export class Arrow extends ex.Actor {
       width: 16,
       height: 16,
       scale: SCALE_2x,
+      collider: ex.Shape.Box(10, 5, ANCHOR_CENTER, new ex.Vector(0, 5)),
+      collisionType: ex.CollisionType.Passive,
     });
 
     this.addTag(TAG_PLAYER_WEAPON);
@@ -46,6 +50,16 @@ export class Arrow extends ex.Actor {
     // Expire after so much time
     this.msRemaining = 2000;
     this.setPosition();
+
+    this.on('collisionstart', (event) => this.onCollisionStart(event));
+  }
+
+  onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
+    // Take damage from other players weapons
+    if (event.other.hasTag(TAG_WALL)) {
+      this.onDamagedSomething();
+      return;
+    }
   }
 
   setPosition() {

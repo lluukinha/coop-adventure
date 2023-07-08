@@ -3,10 +3,11 @@ import {
   ANCHOR_TOP_LEFT,
   SCALE,
   SCALE_2x,
-  TAG_PLAYER_WEAPON,
+  // TAG_PLAYER_WEAPON,
+  TAG_WALL,
 } from '../constants';
-import { Arrow } from './weapons/Arrow';
-import { Sword } from './weapons/Sword';
+// import { Arrow } from './weapons/Arrow';
+// import { Sword } from './weapons/Sword';
 
 export class Floor extends ex.Actor {
   constructor(x: number, y: number, cols: number, rows: number) {
@@ -23,16 +24,7 @@ export class Floor extends ex.Actor {
       color: ex.Color.Red,
     });
 
-    this.graphics.opacity = 0.5;
-    this.on('collisionstart', (event) => this.onCollisionStart(event));
-  }
-
-  onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
-    // Take damage from other players weapons
-    if (event.other.hasTag(TAG_PLAYER_WEAPON)) {
-      const weapon = event.other as Sword | Arrow;
-      weapon.onDamagedSomething();
-      return;
-    }
+    this.graphics.opacity = 0.0;
+    this.addTag(TAG_WALL);
   }
 }
