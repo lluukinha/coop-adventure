@@ -9,6 +9,7 @@ import {
   SCALE_2x,
   TAG_ANY_PLAYER,
   TAG_DAMAGES_PLAYER,
+  TAG_MONSTER,
   TAG_PLAYER_WEAPON,
   UP,
   WALK,
@@ -26,7 +27,7 @@ import { Explosion } from '../Explosion';
 
 const MONSTER_WALK_VELOCITY = 15;
 const MONSTER_CHASE_VELOCITY = 35;
-const MONSTER_DETECT_PLAYER_RANGE = 50;
+// const MONSTER_DETECT_PLAYER_RANGE = 50;
 
 export class Monster extends ex.Actor {
   public painState: IPainState | null;
@@ -62,6 +63,7 @@ export class Monster extends ex.Actor {
   onInitialize(_engine: ex.Engine): void {
     // Add to enemy group
     this.addTag(TAG_DAMAGES_PLAYER);
+    this.addTag(TAG_MONSTER);
 
     // Choose random roaming point
     this.chooseRoamingPoint();
@@ -122,11 +124,11 @@ export class Monster extends ex.Actor {
       const playersQuery = this.scene.world.queryManager.getQuery([TAG_ANY_PLAYER]);
       // Filter down to nearby ones within pixel range
       const nearbyPlayers = playersQuery
-        .getEntities()
-        .filter((actor: ex.Entity) => {
-          const actorDistance = this.pos.distance((actor as ex.Actor).pos);
-          return actorDistance <= MONSTER_DETECT_PLAYER_RANGE;
-        });
+        .getEntities();
+        // .filter((actor: ex.Entity) => {
+        //   const actorDistance = this.pos.distance((actor as ex.Actor).pos);
+        //   return actorDistance <= MONSTER_DETECT_PLAYER_RANGE;
+        // });
       // If we have results, choose a random one to target
       if (nearbyPlayers.length) {
         this.target = randomFromArray(nearbyPlayers) as Player;

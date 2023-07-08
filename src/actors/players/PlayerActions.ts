@@ -60,8 +60,8 @@ export class PlayerActions {
         actor.actionAnimation.actorObject = sword;
     }
 
-    actionShootArrow() {
-        const SHOOT_ARROW_SPEED = 155;
+    actionShootArrow(attackSpeed: number) {
+        // const SHOOT_ARROW_SPEED = 155;
         const { actor, engine } = this;
 
         // Create a new sequence for arrows
@@ -70,13 +70,13 @@ export class PlayerActions {
             [
                 {
                     frame: actor.skinAnimations[actor.facing][SWORD1],
-                    duration: SHOOT_ARROW_SPEED,
+                    duration: attackSpeed,
                     actorObjCallback: () => {}
                 },
                 {
                     // On this frame, create an Arrow in the samee facing direction as my actor
                     frame: actor.skinAnimations[actor.facing][SWORD2],
-                    duration: SHOOT_ARROW_SPEED,
+                    duration: attackSpeed,
                     actorObjCallback: () => {
                         // Create an arrow projectile
                         const arrow = new Arrow(actor);

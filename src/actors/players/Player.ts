@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { ANCHOR_CENTER, DOWN, LEFT, RIGHT, SCALE_2x, TAG_ANY_PLAYER, TAG_DAMAGES_PLAYER, TAG_PLAYER_WEAPON, UP, WALK } from "../../constants";
+import { ANCHOR_CENTER, DOWN, LEFT, RIGHT, SCALE_2x, TAG_ANY_PLAYER, TAG_DAMAGES_PLAYER, TAG_MONSTER, TAG_PLAYER_WEAPON, UP, WALK } from "../../constants";
 // import { DrawShapeHelper } from "../../classes/DrawShapeHelper";
 import { IAnimationPayload, IPainState, generateCharacterAnimations } from "../../character-animations";
 import { PlayerAnimations } from "./PlayerAnimations";
@@ -31,6 +31,7 @@ export class Player extends ex.Actor {
     public actionAnimation: SpriteSequence | null;
     public isPainFlashing: boolean;
     public painState: IPainState | null;
+    public attackSpeed: number = 255;
 
     constructor(x: number, y: number, skinId: string) {
         super({
@@ -111,9 +112,22 @@ export class Player extends ex.Actor {
         // Work on dedicated animation if we are doing one
         this.playerAnimations?.progressThroughActionAnimation(_delta);
 
+        this.onPreUpdateMovement(_engine, _delta);
+
         if (!this.actionAnimation) {
-            this.onPreUpdateMovement(_engine, _delta);
+            // this.onPreUpdateMovement(_engine, _delta);
             this.onPreUpdateActionKeys(_engine);
+
+            const monstersAlive = this.scene.world.queryManager.getQuery([TAG_MONSTER]).getEntities();
+
+            if (this.vel.x === 0 && this.vel.y === 0 && monstersAlive.length > 0) {
+                this.playerActions?.actionShootArrow(this.attackSpeed);
+            }
+
+            // if (_engine.input.keyboard.wasPressed(ACTION_2_KEY)) {
+            //     this.playerActions?.actionShootArrow();
+            //     return;
+            // }
         }
 
         // Show the right frames
@@ -168,10 +182,10 @@ export class Player extends ex.Actor {
             return;
         }
 
-        if (_engine.input.keyboard.wasPressed(ACTION_2_KEY)) {
-            this.playerActions?.actionShootArrow();
-            return;
-        }
+        // if (_engine.input.keyboard.wasPressed(ACTION_2_KEY)) {
+        //     this.playerActions?.actionShootArrow();
+        //     return;
+        // }
 
         for(let i: number = 0; i < PLAYERS.length; i++){
             const { key, skinId } = PLAYERS[i];

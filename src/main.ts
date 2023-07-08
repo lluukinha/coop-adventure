@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH , SCALE, TAG_ANY_PLAYER } from "./constants";
+import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH , SCALE, TAG_ANY_PLAYER, TAG_MONSTER } from "./constants";
 import { Player } from "./actors/players/Player";
 import { loader, Maps } from "./resources";
 import { TiledMapResource } from "@excaliburjs/plugin-tiled";
@@ -24,6 +24,7 @@ game.on("initialize", () => {
 
   // Set up ability to query for certain actors on the fly
   game.currentScene.world.queryManager.createQuery([TAG_ANY_PLAYER]);
+  game.currentScene.world.queryManager.createQuery([TAG_MONSTER]);
 
   let playerIncluded = false;
 
