@@ -11,7 +11,7 @@ import { TiledMapResource } from '@excaliburjs/plugin-tiled';
 import { Floor } from './actors/Floor';
 import { Player_CameraStrategy } from './classes/Player_CameraStrategy';
 import { Monster } from './actors/monsters/Monster';
-
+import '../src/style.css';
 const game = new ex.Engine({
   width: VIEWPORT_WIDTH * SCALE,
   height: VIEWPORT_HEIGHT * SCALE,

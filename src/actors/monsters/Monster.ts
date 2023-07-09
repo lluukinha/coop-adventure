@@ -26,7 +26,6 @@ import { Arrow } from '../weapons/Arrow';
 import { Explosion } from '../Explosion';
 import { PowerUp } from '../../classes/PowerUp';
 
-const MONSTER_WALK_VELOCITY = 15;
 const MONSTER_CHASE_VELOCITY = 35;
 // const MONSTER_DETECT_PLAYER_RANGE = 50;
 
@@ -74,9 +73,6 @@ export class Monster extends ex.Actor {
     this.addTag(TAG_DAMAGES_PLAYER);
     this.addTag(TAG_MONSTER);
 
-    // Choose random roaming point
-    this.chooseRoamingPoint();
-
     // Periodically query for a new target
     void this.queryForTarget();
   }
@@ -103,8 +99,7 @@ export class Monster extends ex.Actor {
       const explosion = new Explosion(this.pos.x, this.pos.y);
       this.scene.engine.add(explosion);
 
-      const powerUp = new PowerUp();
-      this.scene.engine.add(powerUp);
+      new PowerUp(this.scene.engine);
       return;
     }
 
@@ -153,16 +148,6 @@ export class Monster extends ex.Actor {
     await this.queryForTarget();
   }
 
-  chooseRoamingPoint() {
-    const possibleRoamingSpots = [
-      new ex.Vector(84 * SCALE, 96 * SCALE),
-      new ex.Vector(210 * SCALE, 112 * SCALE),
-      new ex.Vector(95 * SCALE, 181 * SCALE),
-      new ex.Vector(224 * SCALE, 184 * SCALE),
-    ];
-    this.roamingPoint = randomFromArray(possibleRoamingSpots) as ex.Vector;
-  }
-
   onPreUpdate(_engine: ex.Engine, _delta: number): void {
     if (this.isPaused) return this.checkPaused();
     this.onPreUpdateMove(_delta);
@@ -186,31 +171,6 @@ export class Monster extends ex.Actor {
     // Pursue target or roaming point
     if (!!this.target) {
       this.moveTowardsTarget(this.target);
-    } else if (!!this.roamingPoint) {
-      this.moveTowardsRoamingPoint(this.roamingPoint);
-    }
-  }
-
-  moveTowardsRoamingPoint(roamingPoint: ex.Vector) {
-    // Move towards the point if far enough away
-    const distance = roamingPoint.distance(this.pos);
-
-    if (distance < 5) {
-      this.chooseRoamingPoint();
-      return;
-    }
-
-    if (this.pos.x < roamingPoint.x) {
-      this.vel.x = MONSTER_WALK_VELOCITY;
-    }
-    if (this.pos.x > roamingPoint.x) {
-      this.vel.x = -MONSTER_WALK_VELOCITY;
-    }
-    if (this.pos.y < roamingPoint.y) {
-      this.vel.y = MONSTER_WALK_VELOCITY;
-    }
-    if (this.pos.y > roamingPoint.y) {
-      this.vel.y = -MONSTER_WALK_VELOCITY;
     }
   }
 

@@ -95,3 +95,29 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.power-up-screen {
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  opacity: 0.6;
+}
+
+.power-up {
+  width: 100px;
+  height: 150px;
+  background-color: black;
+  border: 2px solid white;
+  border-radius: 4px;
+  transition: all 0.5s ease;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.power-up:hover {
+  width: 120px !important;
+  height: 170px !important;
+}
