@@ -37,3 +37,4 @@ export const TAG_PLAYER_WEAPON = 'TAG_PLAYER_WEAPON';
 export const TAG_DAMAGES_PLAYER = 'TAG_DAMAGES_PLAYER';
 export const TAG_MONSTER = 'TAG_MONSTER';
 export const TAG_WALL = 'TAG_WALL';
+export const TAG_COIN = 'TAG_COIN';

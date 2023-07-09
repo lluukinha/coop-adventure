@@ -1,5 +1,5 @@
 import * as ex from 'excalibur';
-import { Images } from '../../resources.js';
+import { Images, Sounds } from '../../resources.js';
 import {
   ANCHOR_CENTER,
   DOWN,
@@ -50,6 +50,7 @@ export class Arrow extends ex.Actor {
     // Expire after so much time
     this.msRemaining = 2000;
     this.setPosition();
+    Sounds.attackSound.play();
 
     this.on('collisionstart', (event) => this.onCollisionStart(event));
   }

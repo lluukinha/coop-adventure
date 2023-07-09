@@ -13,9 +13,10 @@ import { Player_CameraStrategy } from './classes/Player_CameraStrategy';
 import { Monster } from './actors/monsters/Monster';
 import '../src/style.css';
 const game = new ex.Engine({
+  canvasElementId: 'game',
   width: VIEWPORT_WIDTH * SCALE,
   height: VIEWPORT_HEIGHT * SCALE,
-  displayMode: ex.DisplayMode.FillScreen,
+  // displayMode: ex.DisplayMode.FitScreen,
   fixedUpdateFps: 60,
   antialiasing: false, // PIXEL ART
 });

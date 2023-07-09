@@ -4,28 +4,58 @@ import { TAG_ANY_PLAYER } from '../constants';
 
 export class PowerUp {
   player: Player;
+  engine: ex.Engine;
+  powerUpScreen: HTMLDivElement;
   constructor(_engine: ex.Engine) {
     const playersQuery = _engine.currentScene.world.queryManager.getQuery([
       TAG_ANY_PLAYER,
     ]);
     const nearbyPlayers = playersQuery.getEntities();
+    this.engine = _engine;
+
     this.player = nearbyPlayers[0]! as Player;
+    this.powerUpScreen = document.createElement('div');
+    this.powerUpScreen.classList.add('power-up-screen');
 
-    _engine.stop();
+    this.engine.stop();
 
-    const element = document.createElement('div');
-    element.classList.add('power-up-screen');
+    this.drawPowerUpScreen();
+  }
 
+  drawPowerUpScreen() {
+    this.powerUpScreen.append(this.createAutoAttack());
+    this.powerUpScreen.append(this.createIncreaseSpeed());
+    document.body.prepend(this.powerUpScreen);
+  }
+
+  closePowerUpScreen() {
+    document.querySelector('.power-up-screen')?.remove();
+    this.engine.start();
+  }
+
+  createIncreaseSpeed() {
+    const powerUp = document.createElement('div');
+    powerUp.classList.add('power-up');
+    powerUp.innerText = 'Increase Attack Speed';
+
+    powerUp.addEventListener('click', () => {
+      this.player.attackSpeed -= 50;
+      this.closePowerUpScreen();
+    });
+
+    return powerUp;
+  }
+
+  createAutoAttack() {
     const powerUp = document.createElement('div');
     powerUp.classList.add('power-up');
     powerUp.innerText = 'Auto Attack';
 
-    element.append(powerUp);
-    document.body.prepend(element);
-
     powerUp.addEventListener('click', () => {
       this.player.autoAttack = true;
-      _engine.start();
+      this.closePowerUpScreen();
     });
+
+    return powerUp;
   }
 }

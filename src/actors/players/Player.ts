@@ -5,14 +5,14 @@ import {
   LEFT,
   RIGHT,
   SCALE_2x,
+  SWORDACTION,
   TAG_ANY_PLAYER,
+  TAG_COIN,
   TAG_DAMAGES_PLAYER,
   TAG_MONSTER,
-  //   TAG_PLAYER_WEAPON,
   UP,
   WALK,
 } from '../../constants';
-// import { DrawShapeHelper } from "../../classes/DrawShapeHelper";
 import {
   IAnimationPayload,
   IPainState,
@@ -22,9 +22,9 @@ import { PlayerAnimations } from './PlayerAnimations';
 import { SpriteSequence } from '../../classes/SpriteSequence';
 import { DirectionQueue } from '../../classes/DirectionQueue';
 import { PlayerActions } from './PlayerActions';
-// import { Arrow } from '../weapons/Arrow';
-// import { Sword } from '../weapons/Sword';
 import { Monster } from '../monsters/Monster';
+import { Gem } from '../Gem';
+import { PowerUp } from '../../classes/PowerUp';
 
 const ACTION_1_KEY = ex.Input.Keys.Z;
 const ACTION_2_KEY = ex.Input.Keys.X;
@@ -49,7 +49,7 @@ export class Player extends ex.Actor {
   public painState: IPainState | null;
   public attackSpeed: number = 255;
   public autoAttack: boolean = false;
-  public isPaused: boolean = false;
+  public experience: number = 0;
 
   constructor(x: number, y: number, skinId: string) {
     super({
@@ -85,6 +85,14 @@ export class Player extends ex.Actor {
       console.log('enemy collided');
       this.takeDamage((event.other as Monster).facing);
     }
+
+    if (event.other.hasTag(TAG_COIN)) {
+      const coin = event.other as Gem;
+      coin.sound.play();
+      this.experience += coin.experience;
+      coin.kill();
+      new PowerUp(this.scene.engine);
+    }
   }
 
   calculateOppositeDirection(direction: string): string {
@@ -116,24 +124,21 @@ export class Player extends ex.Actor {
     this.playerActions?.flashSeries();
   }
 
-  checkPaused() {
-    if (this.isPaused) {
-      this.vel.x = 0;
-      this.vel.y = 0;
-    }
-  }
-
   onPreUpdate(_engine: ex.Engine, _delta: number): void {
-    if (this.isPaused) return this.checkPaused();
     this.directionQueue.update(_engine);
 
     // Work on dedicated animation if we are doing one
     this.playerAnimations?.progressThroughActionAnimation(_delta);
 
-    this.onPreUpdateMovement(_engine, _delta);
+    let movementUpdated = false;
+
+    if (!this.actionAnimation || this.actionAnimation.type != SWORDACTION) {
+      this.onPreUpdateMovement(_engine, _delta);
+      movementUpdated = true;
+    }
 
     if (!this.actionAnimation) {
-      // this.onPreUpdateMovement(_engine, _delta);
+      if (!movementUpdated) this.onPreUpdateMovement(_engine, _delta);
       this.onPreUpdateActionKeys(_engine);
 
       if (!!this.autoAttack) {
