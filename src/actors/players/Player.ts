@@ -95,7 +95,6 @@ export class Player extends ex.Actor {
   onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
     // Take damage from external things (Enemies, etc)
     if (event.other.hasTag(TAG_DAMAGES_PLAYER)) {
-      console.log('enemy collided');
       this.takeDamage((event.other as Monster).facing);
     }
 
@@ -104,7 +103,7 @@ export class Player extends ex.Actor {
       coin.sound.play();
       this.experience += coin.experience;
       coin.kill();
-      new PowerUp(this.scene.engine);
+      // new PowerUp(this.scene.engine);
     }
   }
 

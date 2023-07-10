@@ -52,9 +52,9 @@ export class PlayerPortal extends ex.Actor {
 
     this.animations.appearing.events.on('end', () => {
       const player = this.scene.actors.find(a => a.hasTag(TAG_ANY_PLAYER)) as Player;
-        player.actions.fade(1, 1000);
-        player.resume();
-        player.graphics.visible = true;
+      player.actions.fade(1, 1000);
+      player.resume();
+      player.graphics.visible = true;
       this.graphics.use(this.animations.disappearing);
     });
 
