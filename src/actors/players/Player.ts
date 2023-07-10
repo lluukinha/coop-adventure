@@ -10,6 +10,8 @@ import {
   TAG_COIN,
   TAG_DAMAGES_PLAYER,
   TAG_MONSTER,
+  TAG_PLAYER_GEMS,
+  TAG_PLAYER_HUD,
   UP,
   WALK,
 } from '../../constants';
@@ -25,6 +27,8 @@ import { PlayerActions } from './PlayerActions';
 import { Monster } from '../monsters/Monster';
 import { Gem } from '../Gem';
 import { PlayerPowerUps } from '../../powerUps/powerUps';
+import { PlayerGems } from '../../hud/PlayerGems';
+import { PlayerGemsQuantity } from '../../hud/PlayerGemsQuantity';
 
 const ACTION_1_KEY = ex.Input.Keys.Z;
 const ACTION_2_KEY = ex.Input.Keys.X;
@@ -49,7 +53,9 @@ export class Player extends ex.Actor {
   public isPainFlashing: boolean;
   public painState: IPainState | null;
   public experience: number = 0;
+  public gems: number = 0;
   public canMove: boolean = true;
+  public isShowingHud: boolean = false;
 
   // power ups will manipulate this variables below
   public attackSpeed: number = 255;
@@ -91,6 +97,18 @@ export class Player extends ex.Actor {
     this.canMove = true;
   }
 
+  showDetailsOnScene() {
+    this.scene.add(new PlayerGems());
+    this.scene.add(new PlayerGemsQuantity(this.gems));
+    this.isShowingHud = true;
+  }
+
+  removeDetailsFromScene() {
+    const elements = this.scene.actors.filter((a) => a.hasTag(TAG_PLAYER_HUD));
+    elements.forEach((el) => el.kill());
+    this.isShowingHud = false;
+  }
+
   onInitialize(_engine: ex.Engine): void {
     this.playerAnimations = new PlayerAnimations(this);
     this.playerActions = new PlayerActions(this);
@@ -104,12 +122,21 @@ export class Player extends ex.Actor {
     }
 
     if (event.other.hasTag(TAG_COIN)) {
-      const coin = event.other as Gem;
-      coin.sound.play();
-      this.experience += coin.experience;
-      coin.kill();
+      this.updateGemsCounter(event.other as Gem);
       // new PowerUp(this.scene.engine);
     }
+  }
+
+  updateGemsCounter(gem: Gem) {
+    gem.sound.play();
+    this.experience += gem.experience;
+    this.gems += 1;
+    gem.kill();
+
+    const gemCounter = this.scene.actors.find((a) =>
+      a.hasTag(TAG_PLAYER_GEMS)
+    ) as PlayerGemsQuantity;
+    gemCounter.updateQuantity(this.gems);
   }
 
   calculateOppositeDirection(direction: string): string {
@@ -142,6 +169,14 @@ export class Player extends ex.Actor {
   }
 
   onPreUpdate(_engine: ex.Engine, _delta: number): void {
+    if (!this.isShowingHud && this.graphics.visible) {
+      this.showDetailsOnScene();
+    }
+
+    if (!!this.isShowingHud && !this.graphics.visible) {
+      this.removeDetailsFromScene();
+    }
+
     this.directionQueue.update(_engine);
 
     // Work on dedicated animation if we are doing one

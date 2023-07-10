@@ -30,3 +30,5 @@ export const TAG_MONSTER = 'TAG_MONSTER';
 export const TAG_WALL = 'TAG_WALL';
 export const TAG_COIN = 'TAG_COIN';
 export const TAG_TELEPORT = 'TAG_TELEPORT';
+export const TAG_PLAYER_HUD = 'TAG_PLAYER_HUD';
+export const TAG_PLAYER_GEMS = 'TAG_PLAYER_GEMS';

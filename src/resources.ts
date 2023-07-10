@@ -2,6 +2,9 @@ import { TiledMapResource } from '@excaliburjs/plugin-tiled';
 import * as ex from 'excalibur';
 
 const Images: { [key: string]: ex.ImageSource } = {
+  // Font
+  fontImage: new ex.ImageSource('/sprites/debug-font.png'),
+
   // Characters
   redSheetImage: new ex.ImageSource('/sprites/character-red-sheet.png'),
   blueSheetImage: new ex.ImageSource('/sprites/character-blue-sheet.png'),
