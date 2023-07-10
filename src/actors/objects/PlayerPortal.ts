@@ -48,8 +48,6 @@ export class PlayerPortal extends ex.Actor {
   }
 
   onInitialize(_engine: ex.Engine): void {
-    this.graphics.add('portal', this.animations.appearing);
-
     this.animations.appearing.events.on('end', () => {
       const player = this.scene.actors.find(a => a.hasTag(TAG_ANY_PLAYER)) as Player;
       player.actions.fade(1, 1000);

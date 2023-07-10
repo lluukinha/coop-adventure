@@ -51,8 +51,6 @@ export class Teleport extends ex.Actor {
     this.animations.disappearing.strategy = ex.AnimationStrategy.End;
     this.animations.idle.strategy = ex.AnimationStrategy.Loop;
 
-    this.graphics.add('teleport', this.animations.appearing);
-
     this.animations.appearing.events.on('end', () => {
       this.graphics.use(this.animations.idle)
     });
