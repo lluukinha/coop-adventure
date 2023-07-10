@@ -5,9 +5,11 @@ import { Player_CameraStrategy } from '../classes/Player_CameraStrategy';
 import { Floor } from '../actors/Floor';
 import { Monster } from '../actors/monsters/Monster';
 import { Teleport } from '../actors/objects/Teleport';
+import { TAG_ANY_PLAYER } from '../constants';
 
 export default class GameLevel extends ex.Scene {
   public map: TiledMapResource;
+  public playerPosition: TiledObject | null = null;
   constructor(map: TiledMapResource) {
     super();
     this.map = map;
@@ -22,17 +24,16 @@ export default class GameLevel extends ex.Scene {
 
   buildObjectsOnScene(_engine: ex.Engine, objects: TiledObject[]) {
     // Set up ability to query for certain actors on the fly
-    let playerIncluded = false;
     for (let index = 0; index < objects.length; index++) {
       const object = objects[index] as TiledObject;
 
-      if (object.type === 'Player' && !playerIncluded) {
-        const player = new Player(object.x, object.y, 'RED');
-        _engine.add(player);
+      if (object.type === 'Player') {
+        const player = this.actors.find(a => a.hasTag(TAG_ANY_PLAYER)) as Player;
+        player.pos.x = object.x;
+        player.pos.y = object.y;
         const cameraStrategy = new Player_CameraStrategy(player, this.map);
-        _engine.currentScene.camera.addStrategy(cameraStrategy);
-        _engine.currentScene.camera.zoom = 4;
-        playerIncluded = true;
+        this.engine.currentScene.camera.addStrategy(cameraStrategy);
+        this.engine.currentScene.camera.zoom = 4;
       }
 
       if (object.type === 'BoxCollider') {

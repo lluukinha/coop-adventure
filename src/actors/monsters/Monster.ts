@@ -13,7 +13,6 @@ import {
   UP,
   WALK,
 } from '../../constants';
-import { randomFromArray } from '../../helpers';
 import {
   IAnimationPayload,
   IPainState,
