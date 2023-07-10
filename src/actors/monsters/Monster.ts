@@ -22,6 +22,7 @@ import { Player } from '../players/Player';
 import { Sword } from '../weapons/Sword';
 import { Arrow } from '../weapons/Arrow';
 import { Explosion } from '../Explosion';
+import { Sounds } from '../../resources';
 
 const MONSTER_CHASE_VELOCITY = 35;
 // const MONSTER_DETECT_PLAYER_RANGE = 50;
@@ -77,6 +78,13 @@ export class Monster extends ex.Actor {
     }
   }
 
+  die() {
+    Sounds.enemyDownSound.play();
+    this.kill();
+    const explosion = new Explosion(this.pos.x, this.pos.y);
+    this.scene.engine.add(explosion);
+  }
+
   takeDamage(direction: string) {
     if (!!this.painState) return;
 
@@ -85,9 +93,7 @@ export class Monster extends ex.Actor {
 
     // Check for death
     if (this.hp <= 0) {
-      this.kill();
-      const explosion = new Explosion(this.pos.x, this.pos.y);
-      this.scene.engine.add(explosion);
+      this.die();
       return;
     }
 

@@ -6,6 +6,7 @@ import { Floor } from '../actors/Floor';
 import { Monster } from '../actors/monsters/Monster';
 import { Teleport } from '../actors/objects/Teleport';
 import { TAG_ANY_PLAYER } from '../constants';
+import { PlayerPortal } from '../actors/objects/PlayerPortal';
 
 export default class GameLevel extends ex.Scene {
   public map: TiledMapResource;
@@ -28,6 +29,8 @@ export default class GameLevel extends ex.Scene {
       const object = objects[index] as TiledObject;
 
       if (object.type === 'Player') {
+        const portal = new PlayerPortal(object.x, object.y);
+        _engine.add(portal);
         const player = this.actors.find(a => a.hasTag(TAG_ANY_PLAYER)) as Player;
         player.pos.x = object.x;
         player.pos.y = object.y;

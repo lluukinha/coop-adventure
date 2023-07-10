@@ -10,7 +10,6 @@ import {
   TAG_COIN,
   TAG_DAMAGES_PLAYER,
   TAG_MONSTER,
-  TAG_TELEPORT,
   UP,
   WALK,
 } from '../../constants';
@@ -51,6 +50,7 @@ export class Player extends ex.Actor {
   public attackSpeed: number = 255;
   public autoAttack: boolean = false;
   public experience: number = 0;
+  public canMove: boolean = true;
 
   constructor(x: number, y: number, skinId: string) {
     super({
@@ -61,6 +61,8 @@ export class Player extends ex.Actor {
       collider: ex.Shape.Box(15, 13, ANCHOR_CENTER, new ex.Vector(0, 6)),
       collisionType: ex.CollisionType.Active,
       color: ex.Color.Green,
+      visible: false,
+      z: 2
     });
 
     this.directionQueue = new DirectionQueue();
@@ -72,6 +74,16 @@ export class Player extends ex.Actor {
     this.isPainFlashing = false;
     this.painState = null;
     this.on('collisionstart', (event) => this.onCollisionStart(event));
+  }
+
+  pause() {
+    this.canMove = false;
+    this.vel.x = 0;
+    this.vel.y = 0;
+  }
+
+  resume() {
+    this.canMove = true;
   }
 
   onInitialize(_engine: ex.Engine): void {
@@ -93,10 +105,6 @@ export class Player extends ex.Actor {
       this.experience += coin.experience;
       coin.kill();
       new PowerUp(this.scene.engine);
-    }
-
-    if (event.other.hasTag(TAG_TELEPORT) && event.other.graphics.visible) {
-      this.scene.engine.emit('levelup', this);
     }
   }
 
@@ -162,6 +170,7 @@ export class Player extends ex.Actor {
   }
 
   onPreUpdateMovement(_engine: ex.Engine, _delta: number): void {
+    if (!this.canMove) return;
     if (!!this.painState) {
       this.vel.x = this.painState.painVelX;
       this.vel.y = this.painState.painVelY;
