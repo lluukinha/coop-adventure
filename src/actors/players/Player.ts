@@ -24,10 +24,11 @@ import { DirectionQueue } from '../../classes/DirectionQueue';
 import { PlayerActions } from './PlayerActions';
 import { Monster } from '../monsters/Monster';
 import { Gem } from '../Gem';
-import { PowerUp } from '../../classes/PowerUp';
+import { PlayerPowerUps } from '../../powerUps/powerUps';
 
 const ACTION_1_KEY = ex.Input.Keys.Z;
 const ACTION_2_KEY = ex.Input.Keys.X;
+const POWER_UP_KEY = ex.Input.Keys.P;
 
 const PLAYERS = [
   { key: ex.Input.Keys.Digit1, skinId: 'RED' },
@@ -47,10 +48,14 @@ export class Player extends ex.Actor {
   public actionAnimation: SpriteSequence | null;
   public isPainFlashing: boolean;
   public painState: IPainState | null;
-  public attackSpeed: number = 255;
-  public autoAttack: boolean = false;
   public experience: number = 0;
   public canMove: boolean = true;
+
+  // power ups will manipulate this variables below
+  public attackSpeed: number = 255;
+  public autoAttack: boolean = false;
+  public walkingSpeed: number = 100;
+  public powerUps: PlayerPowerUps = {};
 
   constructor(x: number, y: number, skinId: string) {
     super({
@@ -183,7 +188,6 @@ export class Player extends ex.Actor {
     }
 
     const keyboard = _engine.input.keyboard;
-    const WALKING_SPEED = 100;
 
     this.vel.x = 0;
     this.vel.y = 0;
@@ -203,8 +207,8 @@ export class Player extends ex.Actor {
     // Normalize walking speed
     if (this.vel.x !== 0 || this.vel.y !== 0) {
       this.vel = this.vel.normalize();
-      this.vel.x = this.vel.x * WALKING_SPEED;
-      this.vel.y = this.vel.y * WALKING_SPEED;
+      this.vel.x = this.vel.x * this.walkingSpeed;
+      this.vel.y = this.vel.y * this.walkingSpeed;
     }
 
     this.facing = this.directionQueue.direction ?? this.facing;
@@ -215,6 +219,10 @@ export class Player extends ex.Actor {
     if (_engine.input.keyboard.wasPressed(ACTION_1_KEY)) {
       this.playerActions?.actionSwingSword();
       return;
+    }
+
+    if (_engine.input.keyboard.wasPressed(POWER_UP_KEY)) {
+      _engine.emit('showPowerUp', () => {});
     }
 
     if (_engine.input.keyboard.wasPressed(ACTION_2_KEY)) {

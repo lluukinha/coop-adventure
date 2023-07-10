@@ -56,7 +56,7 @@ export class Teleport extends ex.Actor {
     });
 
     this.animations.disappearing.events.on('end', () => {
-      this.scene.engine.emit('levelup', this);
+      this.scene.engine.emit('levelup', this.scene);
     })
 
     this.graphics.use(this.animations.appearing);

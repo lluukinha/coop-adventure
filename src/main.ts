@@ -6,6 +6,7 @@ import { TiledMapResource } from '@excaliburjs/plugin-tiled';
 import '../src/style.css';
 import GameLevel from './scenes/GameLevel';
 import { Player } from './actors/players/Player';
+import { PowerUp } from './classes/PowerUp';
 const game = new ex.Engine({
   canvasElementId: 'game',
   width: VIEWPORT_WIDTH * SCALE,
@@ -17,6 +18,12 @@ const game = new ex.Engine({
 
 const player = new Player(0, 0, 'RED');
 game.add(player);
+
+const powerUpScreen = new PowerUp(game, player);
+
+game.on("showPowerUp", () => {
+  powerUpScreen.show();
+})
 
 const level1 = new GameLevel(Maps.tiledMap as TiledMapResource);
 game.add('level1', level1);
@@ -40,5 +47,5 @@ window.addEventListener('blur', () => {
 });
 
 window.addEventListener('focus', () => {
-  game.start();
+  if (!powerUpScreen.active) game.start();
 });
