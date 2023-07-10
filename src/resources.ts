@@ -12,7 +12,9 @@ const Images: { [key: string]: ex.ImageSource } = {
   blueGemSheetImage: new ex.ImageSource('/sprites/blue-gem-sheet.png'),
   coinSheetImage: new ex.ImageSource('/sprites/coin.png'),
   greenPortalSheetImage: new ex.ImageSource('/sprites/green-portal-sheet.png'),
-  purplePortalSheetImage: new ex.ImageSource('/sprites/purple-portal-sheet.png'),
+  purplePortalSheetImage: new ex.ImageSource(
+    '/sprites/purple-portal-sheet.png'
+  ),
 
   // Monsters
   monsterSheetImage: new ex.ImageSource('/sprites/monster-sheet.png'),
@@ -29,7 +31,7 @@ const Sounds: { [key: string]: ex.Sound } = {
   coinSound: new ex.Sound('/sounds/gem.wav'),
   attackSound: new ex.Sound('/sounds/attack.wav'),
   teleportSound: new ex.Sound('/sounds/teleport.wav'),
-  enemyDownSound: new ex.Sound('/sounds/enemyDown.wav')
+  enemyDownSound: new ex.Sound('/sounds/enemyDown.wav'),
 };
 
 const Maps: { [key: string]: TiledMapResource } = {

@@ -1,6 +1,11 @@
 import * as ex from 'excalibur';
 import { Images, Sounds } from '../../resources.js';
-import { ANCHOR_CENTER, TAG_ANY_PLAYER, TAG_MONSTER, TAG_TELEPORT } from '../../constants.js';
+import {
+  ANCHOR_CENTER,
+  TAG_ANY_PLAYER,
+  TAG_MONSTER,
+  TAG_TELEPORT,
+} from '../../constants.js';
 import { Player } from '../players/Player.js';
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
@@ -9,7 +14,7 @@ const spriteSheet = ex.SpriteSheet.fromImageSource({
     columns: 8,
     rows: 3,
     spriteWidth: 64,
-    spriteHeight: 64
+    spriteHeight: 64,
   },
 });
 
@@ -32,37 +37,37 @@ export class Teleport extends ex.Actor {
     this.animations = {
       appearing: ex.Animation.fromSpriteSheet(
         spriteSheet,
-        ex.range(8,15),
+        ex.range(8, 15),
         ANIMATION_SPEED
       ),
       disappearing: ex.Animation.fromSpriteSheet(
         spriteSheet,
-        ex.range(16,23),
+        ex.range(16, 23),
         ANIMATION_SPEED
       ),
       idle: ex.Animation.fromSpriteSheet(
         spriteSheet,
-        ex.range(0,7),
+        ex.range(0, 7),
         ANIMATION_SPEED
-      )
-    }
+      ),
+    };
 
     this.animations.appearing.strategy = ex.AnimationStrategy.End;
     this.animations.disappearing.strategy = ex.AnimationStrategy.End;
     this.animations.idle.strategy = ex.AnimationStrategy.Loop;
 
     this.animations.appearing.events.on('end', () => {
-      this.graphics.use(this.animations.idle)
+      this.graphics.use(this.animations.idle);
     });
 
     this.animations.disappearing.events.on('end', () => {
       this.scene.engine.emit('levelup', this.scene);
-    })
+    });
 
     this.graphics.use(this.animations.appearing);
 
     this.addTag(TAG_TELEPORT);
-    this.on("collisionstart", (event) => this.onCollisionStart(event));
+    this.on('collisionstart', (event) => this.onCollisionStart(event));
   }
 
   onPreUpdate(_engine: ex.Engine, _delta: number): void {

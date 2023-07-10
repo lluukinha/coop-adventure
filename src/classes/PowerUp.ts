@@ -9,27 +9,37 @@ export class PowerUp {
   active: boolean = false;
   keyPressBinder = (key: KeyboardEvent) => {
     if (!this.active) return;
-    const selectedElement = this.powerUpScreen!.querySelector(".selected") as HTMLDivElement;
+    const selectedElement = this.powerUpScreen!.querySelector(
+      '.selected'
+    ) as HTMLDivElement;
     if (key.code === 'Enter' || key.code === 'Space') {
       selectedElement.click();
     } else {
-      const powerUps = [...this.powerUpScreen!.querySelectorAll(".power-up")];
-      const descriptionElement = this.powerUpScreen!.querySelector(".power-up-description") as HTMLDivElement;
-      const selectedIndex = powerUps.findIndex(p => p.classList.contains("selected"));
-      if (key.code === "ArrowRight" || key.code === "KeyD") {
-        const newIndex = selectedIndex === (powerUps.length - 1) ? 0 : selectedIndex + 1;
+      const powerUps = [...this.powerUpScreen!.querySelectorAll('.power-up')];
+      const descriptionElement = this.powerUpScreen!.querySelector(
+        '.power-up-description'
+      ) as HTMLDivElement;
+      const selectedIndex = powerUps.findIndex((p) =>
+        p.classList.contains('selected')
+      );
+      if (key.code === 'ArrowRight' || key.code === 'KeyD') {
+        const newIndex =
+          selectedIndex === powerUps.length - 1 ? 0 : selectedIndex + 1;
         const newSelectedItem = powerUps[newIndex] as HTMLDivElement;
-        selectedElement.classList.remove("selected");
-        newSelectedItem.classList.add("selected");
-        descriptionElement.innerText = newSelectedItem.dataset.description as string;
+        selectedElement.classList.remove('selected');
+        newSelectedItem.classList.add('selected');
+        descriptionElement.innerText = newSelectedItem.dataset
+          .description as string;
       }
 
-      if (key.code === "ArrowLeft" || key.code === "KeyA") {
-        const newIndex = selectedIndex === 0 ? powerUps.length - 1 : selectedIndex - 1;
+      if (key.code === 'ArrowLeft' || key.code === 'KeyA') {
+        const newIndex =
+          selectedIndex === 0 ? powerUps.length - 1 : selectedIndex - 1;
         const newSelectedItem = powerUps[newIndex] as HTMLDivElement;
-        selectedElement.classList.remove("selected");
-        newSelectedItem.classList.add("selected");
-        descriptionElement.innerText = newSelectedItem.dataset.description as string;
+        selectedElement.classList.remove('selected');
+        newSelectedItem.classList.add('selected');
+        descriptionElement.innerText = newSelectedItem.dataset
+          .description as string;
       }
     }
   };
@@ -37,7 +47,7 @@ export class PowerUp {
   constructor(_engine: ex.Engine, player: Player) {
     this.engine = _engine;
     this.player = player;
-    document.addEventListener("keyup", this.keyPressBinder);
+    document.addEventListener('keyup', this.keyPressBinder);
   }
 
   show() {
@@ -70,9 +80,11 @@ export class PowerUp {
       powerUpElement.dataset.description = powerUp.description;
       powerUpElement.addEventListener('click', () => {
         powerUp.method(this.player);
-        this.player.powerUps[powerUp.type] = !!this.player.powerUps[powerUp.type]
-            ? this.player.powerUps[powerUp.type] + 1
-            : 1;
+        this.player.powerUps[powerUp.type] = !!this.player.powerUps[
+          powerUp.type
+        ]
+          ? this.player.powerUps[powerUp.type] + 1
+          : 1;
         this.hide();
       });
       this.powerUpScreen!.append(powerUpElement);
@@ -82,7 +94,5 @@ export class PowerUp {
     document.body.prepend(this.powerUpScreen!);
   }
 
-  closePowerUpScreen() {
-
-  }
+  closePowerUpScreen() {}
 }

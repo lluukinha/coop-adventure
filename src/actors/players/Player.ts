@@ -67,7 +67,7 @@ export class Player extends ex.Actor {
       collisionType: ex.CollisionType.Active,
       color: ex.Color.Green,
       visible: false,
-      z: 2
+      z: 2,
     });
 
     this.directionQueue = new DirectionQueue();

@@ -1,12 +1,13 @@
 import * as ex from 'excalibur';
 import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH, SCALE } from './constants';
-
 import { loader, Maps } from './resources';
 import { TiledMapResource } from '@excaliburjs/plugin-tiled';
 import '../src/style.css';
 import GameLevel from './scenes/GameLevel';
 import { Player } from './actors/players/Player';
 import { PowerUp } from './classes/PowerUp';
+import { MainMenu } from './scenes/MainMenu';
+
 const game = new ex.Engine({
   canvasElementId: 'game',
   width: VIEWPORT_WIDTH * SCALE,
@@ -21,10 +22,12 @@ game.add(player);
 
 const powerUpScreen = new PowerUp(game, player);
 
-game.on("showPowerUp", () => {
+game.on('showPowerUp', () => {
   powerUpScreen.show();
-})
+});
 
+const mainMenu = new MainMenu(game);
+game.add('menu', mainMenu);
 const level1 = new GameLevel(Maps.tiledMap as TiledMapResource);
 game.add('level1', level1);
 const level2 = new GameLevel(Maps.tiledMap2 as TiledMapResource);
@@ -36,10 +39,16 @@ game.on('levelup', () => {
   game.goToScene('level2');
 });
 
-game.start(loader).then(() => {
+game.add(player);
+game.on('startGame', () => {
+  mainMenu.remove(player);
   level1.add(player);
   game.goToScene('level1');
 });
+
+mainMenu.add(player);
+game.goToScene('menu');
+game.start(loader);
 
 // pause when window is not focused
 window.addEventListener('blur', () => {

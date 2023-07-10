@@ -1,46 +1,46 @@
-import { PAIN, WALK } from "../../constants";
-import { Player } from "./Player";
+import { PAIN, WALK } from '../../constants';
+import { Player } from './Player';
 
 export class PlayerAnimations {
-    public actor: Player;
-    constructor(actor: Player) {
-        this.actor = actor;
+  public actor: Player;
+  constructor(actor: Player) {
+    this.actor = actor;
+  }
+
+  progressThroughActionAnimation(delta: number) {
+    const { actor } = this;
+    if (!!actor.actionAnimation) {
+      actor.vel.x = 0;
+      actor.vel.y = 0;
+      actor.actionAnimation.work(delta);
+    }
+  }
+
+  showRelevantAnimation() {
+    const { actor } = this;
+
+    // Always prioritize showing PAIN if we are in pain
+    if (!!actor.painState) {
+      actor.graphics.use(actor.skinAnimations[actor.facing][PAIN]);
+      return;
     }
 
-    progressThroughActionAnimation(delta: number) {
-        const { actor } = this;
-        if (!!actor.actionAnimation) {
-            actor.vel.x = 0;
-            actor.vel.y = 0;
-            actor.actionAnimation.work(delta);
-        }
+    // If a dedicated action is happening, use that
+    if (!!actor.actionAnimation) {
+      actor.graphics.use(actor.actionAnimation.frame);
+      return;
     }
 
-    showRelevantAnimation() {
-        const { actor } = this;
+    actor.graphics.use(actor.skinAnimations[actor.facing][WALK]);
 
-        // Always prioritize showing PAIN if we are in pain
-        if (!!actor.painState) {
-            actor.graphics.use(actor.skinAnimations[actor.facing][PAIN]);
-            return;
-        }
-
-        // If a dedicated action is happening, use that
-        if (!!actor.actionAnimation) {
-            actor.graphics.use(actor.actionAnimation.frame);
-            return;
-        }
-
-        actor.graphics.use(actor.skinAnimations[actor.facing][WALK]);
-
-        const actorGraphic = actor.graphics.current[0].graphic as any;
-        const walkingMsLeft = actor.walkingMsLeft ?? 0;
-        if (actor.vel.x !== 0 || actor.vel.y !== 0 || walkingMsLeft > 0) {
-            actorGraphic.play();
-            return;
-        }
-
-        actorGraphic.pause();
-        actorGraphic.goToFrame(0);
+    const actorGraphic = actor.graphics.current[0].graphic as any;
+    const walkingMsLeft = actor.walkingMsLeft ?? 0;
+    if (actor.vel.x !== 0 || actor.vel.y !== 0 || walkingMsLeft > 0) {
+      actorGraphic.play();
+      return;
     }
+
+    actorGraphic.pause();
+    actorGraphic.goToFrame(0);
+  }
 }

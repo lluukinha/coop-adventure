@@ -4,12 +4,12 @@ import { ANCHOR_CENTER, TAG_ANY_PLAYER } from '../../constants.js';
 import { Player } from '../players/Player.js';
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
-  image: Images.purplePortalSheetImage,
+  image: Images.greenPortalSheetImage,
   grid: {
     columns: 8,
     rows: 3,
     spriteWidth: 64,
-    spriteHeight: 64
+    spriteHeight: 64,
   },
 });
 
@@ -32,12 +32,12 @@ export class PlayerPortal extends ex.Actor {
     this.animations = {
       appearing: ex.Animation.fromSpriteSheet(
         spriteSheet,
-        ex.range(8,15),
+        ex.range(8, 15),
         ANIMATION_SPEED
       ),
       disappearing: ex.Animation.fromSpriteSheet(
         spriteSheet,
-        ex.range(16,23),
+        ex.range(16, 23),
         ANIMATION_SPEED
       ),
     };
@@ -49,7 +49,9 @@ export class PlayerPortal extends ex.Actor {
 
   onInitialize(_engine: ex.Engine): void {
     this.animations.appearing.events.on('end', () => {
-      const player = this.scene.actors.find(a => a.hasTag(TAG_ANY_PLAYER)) as Player;
+      const player = this.scene.actors.find((a) =>
+        a.hasTag(TAG_ANY_PLAYER)
+      ) as Player;
       player.actions.fade(1, 1000);
       player.resume();
       player.graphics.visible = true;
@@ -58,7 +60,7 @@ export class PlayerPortal extends ex.Actor {
 
     this.animations.disappearing.events.on('end', () => {
       this.kill();
-    })
+    });
 
     this.graphics.use(this.animations.appearing);
   }
