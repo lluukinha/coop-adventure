@@ -7,13 +7,11 @@ export class PowerUp {
   engine: ex.Engine;
   powerUpScreen: HTMLDivElement;
   constructor(_engine: ex.Engine) {
-    const playersQuery = _engine.currentScene.world.queryManager.getQuery([
-      TAG_ANY_PLAYER,
-    ]);
-    const nearbyPlayers = playersQuery.getEntities();
     this.engine = _engine;
 
-    this.player = nearbyPlayers[0]! as Player;
+    this.player = _engine.currentScene.actors.find((a) =>
+      a.hasTag(TAG_ANY_PLAYER)
+    ) as Player;
     this.powerUpScreen = document.createElement('div');
     this.powerUpScreen.classList.add('power-up-screen');
 

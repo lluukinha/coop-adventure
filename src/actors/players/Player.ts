@@ -10,6 +10,7 @@ import {
   TAG_COIN,
   TAG_DAMAGES_PLAYER,
   TAG_MONSTER,
+  TAG_TELEPORT,
   UP,
   WALK,
 } from '../../constants';
@@ -92,6 +93,10 @@ export class Player extends ex.Actor {
       this.experience += coin.experience;
       coin.kill();
       new PowerUp(this.scene.engine);
+    }
+
+    if (event.other.hasTag(TAG_TELEPORT) && event.other.graphics.visible) {
+      this.scene.engine.emit('levelup', this);
     }
   }
 

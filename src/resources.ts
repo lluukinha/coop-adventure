@@ -10,6 +10,7 @@ const Images: { [key: string]: ex.ImageSource } = {
 
   // Gems
   blueGemSheetImage: new ex.ImageSource('/sprites/blue-gem-sheet.png'),
+  coinSheetImage: new ex.ImageSource('/sprites/coin.png'),
 
   // Monsters
   monsterSheetImage: new ex.ImageSource('/sprites/monster-sheet.png'),
@@ -29,6 +30,7 @@ const Sounds: { [key: string]: ex.Sound } = {
 
 const Maps: { [key: string]: TiledMapResource } = {
   tiledMap: new TiledMapResource('/maps/map.tmx'),
+  tiledMap2: new TiledMapResource('/maps/map2.tmx'),
 };
 
 const loader = new ex.Loader();

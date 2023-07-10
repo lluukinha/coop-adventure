@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="26">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="27">
  <tileset firstgid="1" source="indoor.tsx"/>
  <layer id="1" name="map" width="30" height="20" locked="1">
   <data encoding="csv">
@@ -25,20 +25,22 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="Pointers" locked="1">
+ <objectgroup id="6" name="Pointers">
   <properties>
    <property name="excalibur" type="bool" value="true"/>
   </properties>
   <object id="4" name="Player" type="Player" x="103.582" y="185.102">
    <point/>
   </object>
+  <object id="26" name="Teleport" type="Teleport" x="310.5" y="136">
+   <point/>
+  </object>
  </objectgroup>
- <objectgroup id="7" name="Colliders">
+ <objectgroup id="7" name="Colliders" locked="1">
   <properties>
    <property name="excalibur" type="bool" value="true"/>
   </properties>
   <object id="6" type="BoxCollider" x="160.182" y="96.1818" width="79.7273" height="79.8182"/>
-  <object id="7" type="BoxCollider" x="394.875" y="211.375" width="14.625" height="79.125"/>
   <object id="15" name="BoxCollider" type="BoxCollider" x="50.5" y="34.5" width="10.5" height="170.5"/>
   <object id="16" name="BoxCollider" type="BoxCollider" x="47.5" y="194" width="31" height="21.5"/>
   <object id="17" name="BoxCollider" type="BoxCollider" x="61" y="209.5" width="49.5" height="19"/>

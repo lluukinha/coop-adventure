@@ -38,3 +38,4 @@ export const TAG_DAMAGES_PLAYER = 'TAG_DAMAGES_PLAYER';
 export const TAG_MONSTER = 'TAG_MONSTER';
 export const TAG_WALL = 'TAG_WALL';
 export const TAG_COIN = 'TAG_COIN';
+export const TAG_TELEPORT = 'TAG_TELEPORT';
