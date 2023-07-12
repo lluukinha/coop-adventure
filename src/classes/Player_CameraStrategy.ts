@@ -1,6 +1,5 @@
 import * as ex from 'excalibur';
 import { Player } from '../actors/players/Player';
-import { SCALE } from '../constants';
 import { TiledMapResource } from '@excaliburjs/plugin-tiled';
 
 export class Player_CameraStrategy {
@@ -25,16 +24,16 @@ export class Player_CameraStrategy {
 
     // Limits
     const { tileWidth, tileHeight, width, height } = this.map.data;
-    const R_LIMIT = tileWidth * width * SCALE * 16 - 7 * SCALE * 16;
+    const R_LIMIT = tileWidth * width / 1.42;
     this.position.x = this.position.x > R_LIMIT ? R_LIMIT : this.position.x;
 
-    const L_LIMIT = 8 * SCALE * 16;
+    const L_LIMIT = 16 * 16 * 1.15;
     this.position.x = this.position.x < L_LIMIT ? L_LIMIT : this.position.x;
 
-    const D_LIMIT = tileHeight * height * SCALE - 5 * SCALE * 16;
+    const D_LIMIT = tileHeight * height / 1.42;
     this.position.y = this.position.y > D_LIMIT ? D_LIMIT : this.position.y;
 
-    const U_LIMIT = 7 * SCALE * 16;
+    const U_LIMIT = 16 * 16 / 1.3;
     this.position.y = this.position.y < U_LIMIT ? U_LIMIT : this.position.y;
 
     return this.position;

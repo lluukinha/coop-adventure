@@ -2,7 +2,7 @@ import * as ex from 'excalibur';
 import { Images, Sounds } from '../../resources.js';
 import {
   ANCHOR_CENTER,
-  SCALE_4x,
+  SCALE_3x,
   TAG_ANY_PLAYER,
   TAG_MONSTER,
   TAG_TELEPORT,
@@ -29,7 +29,7 @@ export class Teleport extends ex.Actor {
       pos: new ex.Vector(x, y),
       width: 16,
       height: 16,
-      scale: SCALE_4x,
+      scale: SCALE_3x,
       collider: ex.Shape.Box(3, 3, ANCHOR_CENTER, new ex.Vector(0, 4)),
       collisionType: ex.CollisionType.Passive,
       z: 9,
@@ -68,6 +68,7 @@ export class Teleport extends ex.Actor {
       const event = new ex.GameEvent<string, string>();
       event.target = this.nextLevel;
       this.scene.engine.emit('levelup', event);
+      this.kill();
     });
 
     this.graphics.use(this.animations.appearing);
@@ -76,12 +77,14 @@ export class Teleport extends ex.Actor {
     this.on('collisionstart', (event) => this.onCollisionStart(event));
   }
 
-  onPreUpdate(_engine: ex.Engine, _delta: number): void {
+  onPostUpdate(_engine: ex.Engine, _delta: number): void {
     const monsters = _engine.currentScene.actors.filter((a) =>
       a.hasTag(TAG_MONSTER)
     );
     if (monsters.length === 0) {
       this.graphics.visible = true;
+    } else {
+      this.graphics.visible = false;
     }
   }
 

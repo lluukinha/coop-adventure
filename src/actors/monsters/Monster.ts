@@ -132,7 +132,7 @@ export class Monster extends ex.Actor {
     await this.queryForTarget();
   }
 
-  onPreUpdate(_engine: ex.Engine, _delta: number): void {
+  onPostUpdate(_engine: ex.Engine, _delta: number): void {
     this.onPreUpdateMove(_delta);
 
     // Show correct appearance

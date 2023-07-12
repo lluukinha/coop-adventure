@@ -18,9 +18,15 @@ export default class GameLevel extends ex.Scene {
 
   onInitialize(_engine: ex.Engine): void {
     this.map.addTiledMapToScene(this);
-    const layers = this.map.data.getExcaliburObjects();
-    const objects = layers.flatMap((layer) => layer.objects);
-    this.buildObjectsOnScene(_engine, objects);
+    // const layers = this.map.data.getExcaliburObjects();
+    // const objects = layers.flatMap((layer) => layer.objects);
+    // this.buildObjectsOnScene(_engine, objects);
+  }
+
+  onActivate(_context: ex.SceneActivationContext<unknown>): void {
+      const layers = this.map.data.getExcaliburObjects();
+      const objects = layers.flatMap((layer) => layer.objects);
+      this.buildObjectsOnScene(_context.engine, objects);
   }
 
   buildObjectsOnScene(_engine: ex.Engine, objects: TiledObject[]) {

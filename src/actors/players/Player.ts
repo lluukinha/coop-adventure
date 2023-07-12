@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import {
-  ANCHOR_CENTER,
+  ANCHOR_BOTTOM_CENTER,
   DOWN,
   LEFT,
   RIGHT,
@@ -69,7 +69,7 @@ export class Player extends ex.Actor {
       width: 16,
       height: 16,
       scale: SCALE_2x,
-      collider: ex.Shape.Box(32, 40, ANCHOR_CENTER, new ex.Vector(0, 6)),
+      collider: ex.Shape.Box(32, 35, ANCHOR_BOTTOM_CENTER, new ex.Vector(0, 6)),
       collisionType: ex.CollisionType.Active,
       color: ex.Color.Green,
       visible: false,
