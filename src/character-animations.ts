@@ -22,7 +22,7 @@ export interface IPainState {
     painVelY: number;
 }
 
-const WALK_ANIM_SPEED = 150;
+const WALK_ANIM_SPEED = 50;
 const charSpritesheetGridConfig = {
     columns: 10,
     rows: 10,
@@ -50,11 +50,53 @@ const yellowSpriteSheet = ex.SpriteSheet.fromImageSource({
     grid: charSpritesheetGridConfig
 });
 
+const heroSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Images.heroSheetImage,
+    grid: {
+        columns: 13,
+        rows: 21,
+        spriteWidth: 64,
+        spriteHeight: 64,
+    }
+});
+
+heroSpriteSheet.sprites.map(s => {
+    s.scale = new ex.Vector(0.5, 0.5);
+    return s;});
+
 const SPRITESHEET_MAP: { [key: string]: ex.SpriteSheet } = {
     RED: redSpriteSheet,
     BLUE: blueSpriteSheet,
     GRAY: graySpriteSheet,
-    YELLOW: yellowSpriteSheet
+    YELLOW: yellowSpriteSheet,
+    HERO: heroSpriteSheet
+}
+
+const HERO_ANIMATION_CONFIGS: IAnimationConfig = {
+    [DOWN]: {
+        WALK: { frames: [130,131,132,133,134,135,136, 137, 138], speed: WALK_ANIM_SPEED },
+        SWORD1: { frames: [184,], speed: WALK_ANIM_SPEED },
+        SWORD2: { frames: [187], speed: WALK_ANIM_SPEED },
+        PAIN: { frames: [4], speed: WALK_ANIM_SPEED }
+    },
+    [UP]: {
+        WALK: { frames: [104, 105,106,107,108,109,110,111,112], speed: WALK_ANIM_SPEED },
+        SWORD1: { frames: [158], speed: WALK_ANIM_SPEED },
+        SWORD2: { frames: [161], speed: WALK_ANIM_SPEED },
+        PAIN: { frames: [14], speed: WALK_ANIM_SPEED }
+    },
+    [LEFT]: {
+        WALK: { frames: [117, 118, 119, 120, 121, 122, 123, 124, 125], speed: WALK_ANIM_SPEED },
+        SWORD1: { frames: [173], speed: WALK_ANIM_SPEED },
+        SWORD2: { frames: [172], speed: WALK_ANIM_SPEED },
+        PAIN: { frames: [24], speed: WALK_ANIM_SPEED }
+    },
+    [RIGHT]: {
+        WALK: { frames: [143, 144,145,146,147,148,149,150,151], speed: WALK_ANIM_SPEED },
+        SWORD1: { frames: [199], speed: WALK_ANIM_SPEED },
+        SWORD2: { frames: [197], speed: WALK_ANIM_SPEED },
+        PAIN: { frames: [34], speed: WALK_ANIM_SPEED }
+    }
 }
 
 const ANIMATION_CONFIGS: IAnimationConfig = {
@@ -90,7 +132,8 @@ export const generateCharacterAnimations = (spriteSheetKey: string) => {
     [UP, DOWN, LEFT, RIGHT].forEach((direction: string) => {
         payload[direction] = {};
         [WALK, SWORD1, SWORD2, PAIN].forEach((pose: string) => {
-            const { frames, speed } = ANIMATION_CONFIGS[direction][pose];
+            const config = spriteSheetKey === 'HERO' ? HERO_ANIMATION_CONFIGS : ANIMATION_CONFIGS;
+            const { frames, speed } = config[direction][pose];
             payload[direction][pose] = ex.Animation.fromSpriteSheet(
                 sheet,
                 [...frames],

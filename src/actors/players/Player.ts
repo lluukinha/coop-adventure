@@ -39,6 +39,7 @@ const PLAYERS = [
   { key: ex.Input.Keys.Digit2, skinId: 'BLUE' },
   { key: ex.Input.Keys.Digit3, skinId: 'GRAY' },
   { key: ex.Input.Keys.Digit4, skinId: 'YELLOW' },
+  { key: ex.Input.Keys.Digit5, skinId: 'HERO' },
 ];
 
 export class Player extends ex.Actor {

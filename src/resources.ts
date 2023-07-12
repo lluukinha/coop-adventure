@@ -10,6 +10,7 @@ const Images: { [key: string]: ex.ImageSource } = {
   blueSheetImage: new ex.ImageSource('/sprites/character-blue-sheet.png'),
   graySheetImage: new ex.ImageSource('/sprites/character-gray-sheet.png'),
   yellowSheetImage: new ex.ImageSource('/sprites/character-yellow-sheet.png'),
+  heroSheetImage: new ex.ImageSource('/sprites/hero.png'),
 
   // Gems
   blueGemSheetImage: new ex.ImageSource('/sprites/blue-gem-sheet.png'),
