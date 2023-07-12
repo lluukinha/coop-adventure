@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { Images, Sounds } from '../../resources.js';
-import { ANCHOR_CENTER, TAG_ANY_PLAYER } from '../../constants.js';
+import { ANCHOR_CENTER, SCALE_4x, TAG_ANY_PLAYER } from '../../constants.js';
 import { Player } from '../players/Player.js';
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
@@ -22,10 +22,10 @@ export class PlayerPortal extends ex.Actor {
       pos: new ex.Vector(x, y),
       width: 16,
       height: 16,
-      scale: new ex.Vector(0.8, 0.8),
+      scale: SCALE_4x,
       collider: ex.Shape.Box(3, 3, ANCHOR_CENTER, new ex.Vector(0, 4)),
       collisionType: ex.CollisionType.Passive,
-      z: 1,
+      z: 9,
       visible: true,
     });
 

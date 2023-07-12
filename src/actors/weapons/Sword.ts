@@ -5,7 +5,7 @@ import {
   LEFT,
   RIGHT,
   SCALE,
-  SCALE_2x,
+  SCALE_4x,
   TAG_PLAYER_WEAPON,
   UP,
 } from '../../constants';
@@ -60,9 +60,10 @@ export class Sword extends ex.Actor {
       pos: new ex.Vector(owner.pos.x, owner.pos.y),
       width: 32,
       height: 32,
-      scale: SCALE_2x,
-      collider: ex.Shape.Box(16, 16, ex.Vector.Zero, new ex.Vector(-8, -8)),
+      scale: SCALE_4x,
+      collider: ex.Shape.Box(32, 32, ex.Vector.Zero, new ex.Vector(-8, -8)),
       collisionType: ex.CollisionType.Passive,
+      z: 99
     });
 
     this.direction = owner.facing;

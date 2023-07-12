@@ -17,7 +17,7 @@ const game = new ex.Engine({
   antialiasing: false, // PIXEL ART
 });
 
-const player = new Player(0, 0, 'RED');
+const player = new Player(0, 0, 'HERO');
 game.add(player);
 
 const powerUpScreen = new PowerUp(game, player);
@@ -32,18 +32,22 @@ const level1 = new GameLevel(Maps.tiledMap as TiledMapResource);
 game.add('level1', level1);
 const level2 = new GameLevel(Maps.tiledMap2 as TiledMapResource);
 game.add('level2', level2);
+const level3 = new GameLevel(Maps.tiledMap3 as TiledMapResource);
+game.add('level3', level3);
 
-game.on('levelup', () => {
+game.on('levelup', (event: ex.GameEvent<string>) => {
   level1.remove(player);
-  level2.add(player);
-  game.goToScene('level2');
+  eval(event.target).add(player);
+  game.goToScene(event.target);
 });
 
 game.add(player);
 game.on('startGame', () => {
   mainMenu.remove(player);
-  level1.add(player);
-  game.goToScene('level1');
+  // level1.add(player);
+  // game.goToScene('level1');
+  level3.add(player);
+  game.goToScene('level3');
 });
 
 mainMenu.add(player);

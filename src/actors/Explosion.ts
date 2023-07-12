@@ -1,5 +1,5 @@
 import * as ex from 'excalibur';
-import { SCALE_2x } from '../constants.js';
+import { SCALE_4x } from '../constants.js';
 import { Images } from '../resources.js';
 import { Gem } from './Gem.js';
 
@@ -21,7 +21,8 @@ export class Explosion extends ex.Actor {
       pos: new ex.Vector(x, y),
       width: 32,
       height: 32,
-      scale: SCALE_2x,
+      scale: SCALE_4x,
+      z: 99
     });
 
     // Do the animation, then remove instance after it's done

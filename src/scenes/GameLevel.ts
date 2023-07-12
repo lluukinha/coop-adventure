@@ -36,7 +36,7 @@ export default class GameLevel extends ex.Scene {
         player.pos.y = object.y;
         const cameraStrategy = new Player_CameraStrategy(player, this.map);
         this.engine.currentScene.camera.addStrategy(cameraStrategy);
-        this.engine.currentScene.camera.zoom = 4;
+        this.engine.currentScene.camera.zoom = 3;
       }
 
       if (object.type === 'BoxCollider') {
@@ -55,7 +55,8 @@ export default class GameLevel extends ex.Scene {
       }
 
       if (object.type === 'Teleport') {
-        const teleport = new Teleport(object.x, object.y);
+        const direction: string = object.properties.find(p => p.name === 'direction')!.value as string;
+        const teleport = new Teleport(object.x, object.y, direction);
         _engine.add(teleport);
       }
     }

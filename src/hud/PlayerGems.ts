@@ -20,6 +20,7 @@ export class PlayerGems extends ex.ScreenElement {
       x: 30,
       y: 30,
       scale: new ex.Vector(3, 3),
+      z: 99
     });
   }
 

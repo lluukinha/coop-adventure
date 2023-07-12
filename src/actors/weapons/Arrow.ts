@@ -42,6 +42,7 @@ export class Arrow extends ex.Actor {
       scale: SCALE_2x,
       collider: ex.Shape.Box(10, 5, ANCHOR_CENTER, new ex.Vector(0, 5)),
       collisionType: ex.CollisionType.Passive,
+      z: 99
     });
 
     this.addTag(TAG_PLAYER_WEAPON);

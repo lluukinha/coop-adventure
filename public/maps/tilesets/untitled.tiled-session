@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/projects/coop-adventure/public/maps/map.tmx": {
+            "scale": 2.87375,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 239.75641583297087,
+                "y": 209.13440626359287
+            }
+        },
+        "indoor.tsx": {
+            "scaleInDock": 1
+        },
+        "map.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 3.716875,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 239.7175046241802,
+                "y": 159.5426265343871
+            }
+        }
+    },
+    "last.imagePath": "C:/projects/coop-adventure/public/maps",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+    ],
+    "project": "untitled.tiled-project",
+    "property.type": "string",
+    "recentFiles": [
+        "map.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

@@ -33,6 +33,9 @@
    <point/>
   </object>
   <object id="26" name="Teleport" type="Teleport" x="310.5" y="136">
+    <properties>
+    <property name="direction" value="level2"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

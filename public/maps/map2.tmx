@@ -32,6 +32,12 @@
   <object id="4" name="Player" type="Player" x="104.582" y="43.602">
    <point/>
   </object>
+  <object id="24" name="Teleport" type="Teleport" x="248" y="268">
+   <properties>
+    <property name="direction" value="level3"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="7" name="Colliders">
   <properties>

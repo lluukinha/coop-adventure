@@ -60,10 +60,6 @@ const heroSpriteSheet = ex.SpriteSheet.fromImageSource({
     }
 });
 
-heroSpriteSheet.sprites.map(s => {
-    s.scale = new ex.Vector(0.5, 0.5);
-    return s;});
-
 const SPRITESHEET_MAP: { [key: string]: ex.SpriteSheet } = {
     RED: redSpriteSheet,
     BLUE: blueSpriteSheet,

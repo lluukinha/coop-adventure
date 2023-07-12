@@ -2,6 +2,7 @@ import * as ex from 'excalibur';
 import { Images, Sounds } from '../../resources.js';
 import {
   ANCHOR_CENTER,
+  SCALE_4x,
   TAG_ANY_PLAYER,
   TAG_MONSTER,
   TAG_TELEPORT,
@@ -22,17 +23,20 @@ const ANIMATION_SPEED = 80;
 
 export class Teleport extends ex.Actor {
   public animations: { [key: string]: ex.Animation };
-  constructor(x: number, y: number) {
+  public nextLevel: string;
+  constructor(x: number, y: number, nextLevel: string) {
     super({
       pos: new ex.Vector(x, y),
       width: 16,
       height: 16,
-      scale: new ex.Vector(0.8, 0.8),
+      scale: SCALE_4x,
       collider: ex.Shape.Box(3, 3, ANCHOR_CENTER, new ex.Vector(0, 4)),
       collisionType: ex.CollisionType.Passive,
-      z: 1,
+      z: 9,
       visible: false,
     });
+
+    this.nextLevel = nextLevel;
 
     this.animations = {
       appearing: ex.Animation.fromSpriteSheet(
@@ -61,7 +65,9 @@ export class Teleport extends ex.Actor {
     });
 
     this.animations.disappearing.events.on('end', () => {
-      this.scene.engine.emit('levelup', this.scene);
+      const event = new ex.GameEvent<string, string>();
+      event.target = this.nextLevel;
+      this.scene.engine.emit('levelup', event);
     });
 
     this.graphics.use(this.animations.appearing);

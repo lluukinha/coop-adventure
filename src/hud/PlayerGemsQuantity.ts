@@ -26,6 +26,7 @@ export class PlayerGemsQuantity extends ex.ScreenElement {
       x: 70,
       y: 25,
       scale: new ex.Vector(3, 3),
+      z: 99
     });
     this.gems = gems;
   }

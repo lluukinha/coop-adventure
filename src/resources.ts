@@ -41,6 +41,7 @@ const Sounds: { [key: string]: ex.Sound } = {
 const Maps: { [key: string]: TiledMapResource } = {
   tiledMap: new TiledMapResource('/maps/map.tmx'),
   tiledMap2: new TiledMapResource('/maps/map2.tmx'),
+  tiledMap3: new TiledMapResource('/maps/level3.tmx'),
 };
 
 const loader = new ex.Loader();
