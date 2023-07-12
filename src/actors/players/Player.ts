@@ -169,7 +169,7 @@ export class Player extends ex.Actor {
     this.playerActions?.flashSeries();
   }
 
-  onPreUpdate(_engine: ex.Engine, _delta: number): void {
+  onPostUpdate(_engine: ex.Engine, _delta: number): void {
     if (!this.isShowingHud && this.graphics.visible) {
       this.showDetailsOnScene();
     }
@@ -183,15 +183,8 @@ export class Player extends ex.Actor {
     // Work on dedicated animation if we are doing one
     this.playerAnimations?.progressThroughActionAnimation(_delta);
 
-    let movementUpdated = false;
-
-    if (!this.actionAnimation || this.actionAnimation.type != SWORDACTION) {
-      this.onPreUpdateMovement(_engine, _delta);
-      movementUpdated = true;
-    }
-
     if (!this.actionAnimation) {
-      if (!movementUpdated) this.onPreUpdateMovement(_engine, _delta);
+      this.onPreUpdateMovement(_engine, _delta);
       this.onPreUpdateActionKeys(_engine);
 
       if (!!this.autoAttack) {

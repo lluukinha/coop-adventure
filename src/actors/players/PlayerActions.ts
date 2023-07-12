@@ -1,5 +1,5 @@
 import { SpriteSequence } from '../../classes/SpriteSequence';
-import { ARROWACTION, SWORD1, SWORD2, SWORDACTION } from '../../constants';
+import { ARROW1, ARROW2, ARROWACTION, SWORD1, SWORD2, SWORDACTION } from '../../constants';
 import { Arrow } from '../weapons/Arrow';
 import {
   SWORD_SWING_1,
@@ -74,13 +74,13 @@ export class PlayerActions {
       ARROWACTION,
       [
         {
-          frame: actor.skinAnimations[actor.facing][SWORD1],
+          frame: actor.skinAnimations[actor.facing][ARROW1],
           duration: attackSpeed,
           actorObjCallback: () => {},
         },
         {
           // On this frame, create an Arrow in the samee facing direction as my actor
-          frame: actor.skinAnimations[actor.facing][SWORD2],
+          frame: actor.skinAnimations[actor.facing][ARROW2],
           duration: attackSpeed,
           actorObjCallback: () => {
             // Create an arrow projectile
