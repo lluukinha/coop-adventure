@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="29">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="30">
  <tileset firstgid="1" source="tilesets/grass.tsx"/>
  <tileset firstgid="19" source="tilesets/dirt.tsx"/>
  <tileset firstgid="37" source="tilesets/water.tsx"/>
@@ -9,7 +9,7 @@
  <tileset firstgid="223" source="tilesets/rock.tsx"/>
  <tileset firstgid="225" source="tilesets/watergrass.tsx"/>
  <layer id="3" name="water" width="30" height="20" locked="1">
- <properties>
+  <properties>
    <property name="excalibur" type="bool" value="true"/>
    <property name="z" value="0"/>
   </properties>
@@ -37,7 +37,7 @@
 </data>
  </layer>
  <layer id="1" name="green" width="30" height="20" locked="1">
- <properties>
+  <properties>
    <property name="excalibur" type="bool" value="true"/>
    <property name="z" value="0"/>
   </properties>
@@ -65,7 +65,7 @@
 </data>
  </layer>
  <layer id="2" name="dirt" width="30" height="20" locked="1">
- <properties>
+  <properties>
    <property name="excalibur" type="bool" value="true"/>
    <property name="z" value="0"/>
   </properties>
@@ -93,7 +93,7 @@
 </data>
  </layer>
  <layer id="4" name="objects" width="30" height="20" locked="1">
- <properties>
+  <properties>
    <property name="excalibur" type="bool" value="true"/>
    <property name="z" value="0"/>
   </properties>
@@ -121,7 +121,7 @@
 </data>
  </layer>
  <layer id="5" name="Tile Layer 5" width="30" height="20" locked="1">
- <properties>
+  <properties>
    <property name="excalibur" type="bool" value="true"/>
    <property name="z" value="2"/>
   </properties>
@@ -195,6 +195,9 @@
    <point/>
   </object>
   <object id="28" name="Monster" type="Monster" x="306.709" y="309.938">
+   <point/>
+  </object>
+  <object id="29" name="Bible" type="Bible" x="95.7794" y="140.979">
    <point/>
   </object>
  </objectgroup>

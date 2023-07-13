@@ -1,47 +1,50 @@
-import { TiledMapResource } from '@excaliburjs/plugin-tiled';
-import * as ex from 'excalibur';
+import { TiledMapResource } from "@excaliburjs/plugin-tiled";
+import * as ex from "excalibur";
 
 const Images: { [key: string]: ex.ImageSource } = {
   // Font
-  fontImage: new ex.ImageSource('/sprites/debug-font.png'),
+  fontImage: new ex.ImageSource("/sprites/debug-font.png"),
 
   // Characters
-  redSheetImage: new ex.ImageSource('/sprites/character-red-sheet.png'),
-  blueSheetImage: new ex.ImageSource('/sprites/character-blue-sheet.png'),
-  graySheetImage: new ex.ImageSource('/sprites/character-gray-sheet.png'),
-  yellowSheetImage: new ex.ImageSource('/sprites/character-yellow-sheet.png'),
-  heroSheetImage: new ex.ImageSource('/sprites/david.png'),
+  redSheetImage: new ex.ImageSource("/sprites/character-red-sheet.png"),
+  blueSheetImage: new ex.ImageSource("/sprites/character-blue-sheet.png"),
+  graySheetImage: new ex.ImageSource("/sprites/character-gray-sheet.png"),
+  yellowSheetImage: new ex.ImageSource("/sprites/character-yellow-sheet.png"),
+  heroSheetImage: new ex.ImageSource("/sprites/david.png"),
 
   // Gems
-  blueGemSheetImage: new ex.ImageSource('/sprites/blue-gem-sheet.png'),
-  coinSheetImage: new ex.ImageSource('/sprites/coin.png'),
-  greenPortalSheetImage: new ex.ImageSource('/sprites/green-portal-sheet.png'),
+  blueGemSheetImage: new ex.ImageSource("/sprites/blue-gem-sheet.png"),
+  coinSheetImage: new ex.ImageSource("/sprites/coin.png"),
+  greenPortalSheetImage: new ex.ImageSource("/sprites/green-portal-sheet.png"),
   purplePortalSheetImage: new ex.ImageSource(
-    '/sprites/purple-portal-sheet.png'
+    "/sprites/purple-portal-sheet.png"
   ),
 
+  // Bible
+  bibleSheetImage: new ex.ImageSource("/sprites/bible.png"),
+
   // Monsters
-  monsterSheetImage: new ex.ImageSource('/sprites/monster-sheet.png'),
+  monsterSheetImage: new ex.ImageSource("/sprites/monster-sheet.png"),
 
   // Weapons
-  swordSheetImage: new ex.ImageSource('/sprites/sword-sheet.png'),
-  arrowSheetImage: new ex.ImageSource('/sprites/arrow-sheet.png'),
+  swordSheetImage: new ex.ImageSource("/sprites/sword-sheet.png"),
+  arrowSheetImage: new ex.ImageSource("/sprites/arrow-sheet.png"),
 
   // Effects
-  explosionSheetImage: new ex.ImageSource('/sprites/explosion-sheet.png'),
+  explosionSheetImage: new ex.ImageSource("/sprites/explosion-sheet.png"),
 };
 
 const Sounds: { [key: string]: ex.Sound } = {
-  coinSound: new ex.Sound('/sounds/gem.wav'),
-  attackSound: new ex.Sound('/sounds/attack.wav'),
-  teleportSound: new ex.Sound('/sounds/teleport.wav'),
-  enemyDownSound: new ex.Sound('/sounds/enemyDown.wav'),
+  coinSound: new ex.Sound("/sounds/gem.wav"),
+  attackSound: new ex.Sound("/sounds/attack.wav"),
+  teleportSound: new ex.Sound("/sounds/teleport.wav"),
+  enemyDownSound: new ex.Sound("/sounds/enemyDown.wav"),
 };
 
 const Maps: { [key: string]: TiledMapResource } = {
-  tiledMap: new TiledMapResource('/maps/map.tmx'),
-  tiledMap2: new TiledMapResource('/maps/map2.tmx'),
-  tiledMap3: new TiledMapResource('/maps/level3.tmx'),
+  tiledMap: new TiledMapResource("/maps/map.tmx"),
+  tiledMap2: new TiledMapResource("/maps/map2.tmx"),
+  tiledMap3: new TiledMapResource("/maps/level3.tmx"),
 };
 
 const loader = new ex.Loader();

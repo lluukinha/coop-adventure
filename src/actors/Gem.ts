@@ -1,6 +1,6 @@
-import * as ex from 'excalibur';
-import { Images, Sounds } from '../resources.js';
-import { ANCHOR_CENTER, SCALE_3x, TAG_COIN } from '../constants.js';
+import * as ex from "excalibur";
+import { Images, Sounds } from "../resources.js";
+import { ANCHOR_CENTER, SCALE_3x, TAG_COIN } from "../constants.js";
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Images.blueGemSheetImage,
@@ -24,7 +24,7 @@ export class Gem extends ex.Actor {
       height: 16,
       scale: SCALE_3x,
       collider: ex.Shape.Box(10, 10, ANCHOR_CENTER),
-      collisionType: ex.CollisionType.Active,
+      collisionType: ex.CollisionType.Passive,
       z: 1,
     });
 
@@ -38,7 +38,7 @@ export class Gem extends ex.Actor {
       ANIMATION_SPEED
     );
     animation.strategy = ex.AnimationStrategy.Loop;
-    this.graphics.add('gem', animation);
+    this.graphics.add("gem", animation);
     this.graphics.use(animation);
     this.addTag(TAG_COIN);
   }

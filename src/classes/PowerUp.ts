@@ -1,6 +1,6 @@
-import * as ex from 'excalibur';
-import { Player } from '../actors/players/Player';
-import { powerUps } from '../powerUps/powerUps';
+import * as ex from "excalibur";
+import { Player } from "../actors/players/Player";
+import { powerUps } from "../powerUps/powerUps";
 
 export class PowerUp {
   player: Player;
@@ -10,34 +10,34 @@ export class PowerUp {
   keyPressBinder = (key: KeyboardEvent) => {
     if (!this.active) return;
     const selectedElement = this.powerUpScreen!.querySelector(
-      '.selected'
+      ".selected"
     ) as HTMLDivElement;
-    if (key.code === 'Enter' || key.code === 'Space') {
+    if (key.code === "Enter" || key.code === "Space") {
       selectedElement.click();
     } else {
-      const powerUps = [...this.powerUpScreen!.querySelectorAll('.power-up')];
+      const powerUps = [...this.powerUpScreen!.querySelectorAll(".power-up")];
       const descriptionElement = this.powerUpScreen!.querySelector(
-        '.power-up-description'
+        ".power-up-description"
       ) as HTMLDivElement;
       const selectedIndex = powerUps.findIndex((p) =>
-        p.classList.contains('selected')
+        p.classList.contains("selected")
       );
-      if (key.code === 'ArrowRight' || key.code === 'KeyD') {
+      if (key.code === "ArrowRight" || key.code === "KeyD") {
         const newIndex =
           selectedIndex === powerUps.length - 1 ? 0 : selectedIndex + 1;
         const newSelectedItem = powerUps[newIndex] as HTMLDivElement;
-        selectedElement.classList.remove('selected');
-        newSelectedItem.classList.add('selected');
+        selectedElement.classList.remove("selected");
+        newSelectedItem.classList.add("selected");
         descriptionElement.innerText = newSelectedItem.dataset
           .description as string;
       }
 
-      if (key.code === 'ArrowLeft' || key.code === 'KeyA') {
+      if (key.code === "ArrowLeft" || key.code === "KeyA") {
         const newIndex =
           selectedIndex === 0 ? powerUps.length - 1 : selectedIndex - 1;
         const newSelectedItem = powerUps[newIndex] as HTMLDivElement;
-        selectedElement.classList.remove('selected');
-        newSelectedItem.classList.add('selected');
+        selectedElement.classList.remove("selected");
+        newSelectedItem.classList.add("selected");
         descriptionElement.innerText = newSelectedItem.dataset
           .description as string;
       }
@@ -47,38 +47,38 @@ export class PowerUp {
   constructor(_engine: ex.Engine, player: Player) {
     this.engine = _engine;
     this.player = player;
-    document.addEventListener('keydown', this.keyPressBinder);
+    document.addEventListener("keydown", this.keyPressBinder);
   }
 
   show() {
     this.active = true;
-    this.powerUpScreen = document.createElement('div');
-    this.powerUpScreen.classList.add('power-up-screen');
+    this.powerUpScreen = document.createElement("div");
+    this.powerUpScreen.classList.add("power-up-screen");
     this.engine.stop();
     this.drawPowerUpScreen();
   }
 
   hide() {
-    document.querySelector('.power-up-screen')?.remove();
+    document.querySelector(".power-up-screen")?.remove();
     this.engine.start();
     this.active = false;
   }
 
   drawPowerUpScreen() {
-    const descriptionElement = document.createElement('div');
-    descriptionElement.classList.add('power-up-description');
+    const descriptionElement = document.createElement("div");
+    descriptionElement.classList.add("power-up-description");
     for (let i: number = 0; i < powerUps.length; i++) {
       const powerUp = powerUps[i];
-      const powerUpElement = document.createElement('div');
-      powerUpElement.classList.add('power-up');
+      const powerUpElement = document.createElement("div");
+      powerUpElement.classList.add("power-up");
       if (i === 0) {
-        powerUpElement.classList.add('selected');
+        powerUpElement.classList.add("selected");
         descriptionElement.innerText = powerUp.description;
       }
 
       powerUpElement.innerText = powerUp.name;
       powerUpElement.dataset.description = powerUp.description;
-      powerUpElement.addEventListener('click', () => {
+      powerUpElement.addEventListener("click", () => {
         powerUp.method(this.player);
         this.player.powerUps[powerUp.type] = !!this.player.powerUps[
           powerUp.type

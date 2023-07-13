@@ -1,13 +1,21 @@
-import { SpriteSequence } from '../../classes/SpriteSequence';
-import { ARROW1, ARROW2, ARROWACTION, SWORD1, SWORD2, SWORDACTION } from '../../constants';
-import { Arrow } from '../weapons/Arrow';
+import { IFrameAnimation } from "../../character-animations";
+import { SpriteSequence } from "../../classes/SpriteSequence";
+import {
+  ARROW1,
+  ARROW2,
+  ARROWACTION,
+  SWORD1,
+  SWORD2,
+  SWORDACTION,
+} from "../../constants";
+import { Arrow } from "../weapons/Arrow";
 import {
   SWORD_SWING_1,
   SWORD_SWING_2,
   SWORD_SWING_3,
   Sword,
-} from '../weapons/Sword';
-import { Player } from './Player';
+} from "../weapons/Sword";
+import { Player } from "./Player";
 
 export class PlayerActions {
   public actor: Player;
@@ -19,7 +27,6 @@ export class PlayerActions {
   }
 
   actionSwingSword() {
-    const SWORD_SWING_SPEED = 50;
     const { actor, engine } = this;
 
     // Create a new sequence with dedicated called per frame
@@ -28,21 +35,21 @@ export class PlayerActions {
       [
         {
           frame: actor.skinAnimations[actor.facing][SWORD1],
-          duration: SWORD_SWING_SPEED,
+          duration: actor.attackSpeed,
           actorObjCallback: (swordInstance: Sword) => {
             swordInstance.useFrame(SWORD_SWING_1, actor.facing);
           },
         },
         {
           frame: actor.skinAnimations[actor.facing][SWORD2],
-          duration: SWORD_SWING_SPEED,
+          duration: actor.attackSpeed,
           actorObjCallback: (swordInstance: Sword) => {
             swordInstance.useFrame(SWORD_SWING_2, actor.facing);
           },
         },
         {
           frame: actor.skinAnimations[actor.facing][SWORD2],
-          duration: SWORD_SWING_SPEED * 2,
+          duration: actor.attackSpeed * 2,
           actorObjCallback: (swordInstance: Sword) => {
             swordInstance.useFrame(SWORD_SWING_3, actor.facing);
           },
@@ -65,35 +72,52 @@ export class PlayerActions {
     actor.actionAnimation.actorObject = sword;
   }
 
+  actionPray() {
+    const { actor, engine } = this;
+
+    const prayFrames = actor.skinAnimations[actor.facing].PRAY.frames.map(
+      (frame, index) => {
+        const finishPray = () => {
+          engine.emit("showPowerUp", () => {});
+        };
+
+        return {
+          frame: frame.graphic,
+          duration: 150,
+          actorObjCallback: index === 6 ? finishPray : () => {},
+        };
+      }
+    ) as unknown as IFrameAnimation[];
+
+    actor.actionAnimation = new SpriteSequence(ARROWACTION, prayFrames, () => {
+      // Clear out dedicated animation when this series is complete
+      actor.actionAnimation = null;
+    });
+  }
+
   actionShootArrow(attackSpeed: number) {
     // const SHOOT_ARROW_SPEED = 155;
     const { actor, engine } = this;
 
-    // Create a new sequence for arrows
-    actor.actionAnimation = new SpriteSequence(
-      ARROWACTION,
-      [
-        {
-          frame: actor.skinAnimations[actor.facing][ARROW1],
+    const arrowFrames = actor.skinAnimations[actor.facing].SHOOT.frames.map(
+      (frame, index) => {
+        const addArrow = () => {
+          const arrow = new Arrow(actor);
+          engine.add(arrow);
+        };
+
+        return {
+          frame: frame.graphic,
           duration: attackSpeed,
-          actorObjCallback: () => {},
-        },
-        {
-          // On this frame, create an Arrow in the samee facing direction as my actor
-          frame: actor.skinAnimations[actor.facing][ARROW2],
-          duration: attackSpeed,
-          actorObjCallback: () => {
-            // Create an arrow projectile
-            const arrow = new Arrow(actor);
-            engine.add(arrow);
-          },
-        },
-      ],
-      () => {
-        // Clear out dedicated animation when this series is complete
-        actor.actionAnimation = null;
+          actorObjCallback: index === 9 ? addArrow : () => {},
+        };
       }
-    );
+    ) as unknown as IFrameAnimation[];
+
+    actor.actionAnimation = new SpriteSequence(ARROWACTION, arrowFrames, () => {
+      // Clear out dedicated animation when this series is complete
+      actor.actionAnimation = null;
+    });
   }
 
   async flashSeries() {

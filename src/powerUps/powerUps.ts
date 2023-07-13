@@ -1,9 +1,9 @@
-import { Player } from '../actors/players/Player';
+import { Player } from "../actors/players/Player";
 
 export enum PowerUpTypes {
-  AutoAttack = 'AutoAttack',
-  IncreaseSpeed = 'IncreaseSpeed',
-  IncreaseAttackSpeed = 'IncreaseAttackSpeed',
+  AutoAttack = "AutoAttack",
+  IncreaseSpeed = "IncreaseSpeed",
+  IncreaseAttackSpeed = "IncreaseAttackSpeed",
 }
 
 export interface PlayerPowerUps {
@@ -11,9 +11,9 @@ export interface PlayerPowerUps {
 }
 
 const autoAttack = {
-  name: 'Auto attack',
+  name: "Auto attack",
   type: PowerUpTypes.AutoAttack,
-  description: 'Player attacks automatically',
+  description: "Player attacks automatically",
   method: (player: Player) => {
     player.autoAttack = true;
   },
@@ -21,9 +21,9 @@ const autoAttack = {
 };
 
 const increaseSpeed = {
-  name: 'Increase speed',
+  name: "Increase speed",
   type: PowerUpTypes.IncreaseSpeed,
-  description: 'Player movement speed will be increased',
+  description: "Player movement speed will be increased",
   method: (player: Player) => {
     player.walkingSpeed += 50;
   },
@@ -31,11 +31,12 @@ const increaseSpeed = {
 };
 
 const increaseAttackSpeed = {
-  name: 'Increase attack speed',
-  description: 'Player attack speed will be increased',
+  name: "Increase attack speed",
+  description: "Player attack speed will be increased",
   type: PowerUpTypes.IncreaseAttackSpeed,
   method: (player: Player) => {
-    player.attackSpeed -= 50;
+    if (player.attackSpeed <= 0) return;
+    player.attackSpeed -= 5;
   },
   maxStack: 5,
 };

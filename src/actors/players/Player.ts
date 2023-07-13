@@ -1,4 +1,4 @@
-import * as ex from 'excalibur';
+import * as ex from "excalibur";
 import {
   DOWN,
   LEFT,
@@ -6,38 +6,37 @@ import {
   SCALE_2x,
   TAG_ANY_PLAYER,
   TAG_COIN,
-  TAG_DAMAGES_PLAYER,
   TAG_MONSTER,
   TAG_PLAYER_GEMS,
   TAG_PLAYER_HUD,
   UP,
   WALK,
-} from '../../constants';
+} from "../../constants";
 import {
   IAnimationPayload,
   IPainState,
   generateCharacterAnimations,
-} from '../../character-animations';
-import { PlayerAnimations } from './PlayerAnimations';
-import { SpriteSequence } from '../../classes/SpriteSequence';
-import { DirectionQueue } from '../../classes/DirectionQueue';
-import { PlayerActions } from './PlayerActions';
-import { Monster } from '../monsters/Monster';
-import { Gem } from '../Gem';
-import { PlayerPowerUps } from '../../powerUps/powerUps';
-import { PlayerGems } from '../../hud/PlayerGems';
-import { PlayerGemsQuantity } from '../../hud/PlayerGemsQuantity';
+} from "../../character-animations";
+import { PlayerAnimations } from "./PlayerAnimations";
+import { SpriteSequence } from "../../classes/SpriteSequence";
+import { DirectionQueue } from "../../classes/DirectionQueue";
+import { PlayerActions } from "./PlayerActions";
+import { Gem } from "../Gem";
+import { PlayerPowerUps } from "../../powerUps/powerUps";
+import { PlayerGems } from "../../hud/PlayerGems";
+import { PlayerGemsQuantity } from "../../hud/PlayerGemsQuantity";
+import { PowerUp } from "../../classes/PowerUp";
 
 const ACTION_1_KEY = ex.Input.Keys.Z;
 const ACTION_2_KEY = ex.Input.Keys.X;
 const POWER_UP_KEY = ex.Input.Keys.P;
 
 const PLAYERS = [
-  { key: ex.Input.Keys.Digit1, skinId: 'RED' },
-  { key: ex.Input.Keys.Digit2, skinId: 'BLUE' },
-  { key: ex.Input.Keys.Digit3, skinId: 'GRAY' },
-  { key: ex.Input.Keys.Digit4, skinId: 'YELLOW' },
-  { key: ex.Input.Keys.Digit5, skinId: 'HERO' },
+  { key: ex.Input.Keys.Digit1, skinId: "RED" },
+  { key: ex.Input.Keys.Digit2, skinId: "BLUE" },
+  { key: ex.Input.Keys.Digit3, skinId: "GRAY" },
+  { key: ex.Input.Keys.Digit4, skinId: "YELLOW" },
+  { key: ex.Input.Keys.Digit5, skinId: "HERO" },
 ];
 
 export class Player extends ex.Actor {
@@ -55,9 +54,10 @@ export class Player extends ex.Actor {
   public gems: number = 0;
   public canMove: boolean = true;
   public isShowingHud: boolean = false;
+  public hasSlingShot: boolean = true;
 
   // power ups will manipulate this variables below
-  public attackSpeed: number = 255;
+  public attackSpeed: number = 50;
   public autoAttack: boolean = false;
   public walkingSpeed: number = 100;
   public powerUps: PlayerPowerUps = {};
@@ -68,10 +68,15 @@ export class Player extends ex.Actor {
       width: 16,
       height: 16,
       scale: SCALE_2x,
-      collider: ex.Shape.Box(20, 15, new ex.Vector(0.5, 0), new ex.Vector(0, 15)),
+      collider: ex.Shape.Box(
+        20,
+        15,
+        new ex.Vector(0.5, 0),
+        new ex.Vector(0, 15)
+      ),
       collisionType: ex.CollisionType.Active,
       visible: false,
-      z: 2
+      z: 2,
     });
 
     this.directionQueue = new DirectionQueue();
@@ -82,7 +87,12 @@ export class Player extends ex.Actor {
     this.graphics.use(this.skinAnimations[this.facing][WALK]);
     this.isPainFlashing = false;
     this.painState = null;
-    this.on('collisionstart', (event) => this.onCollisionStart(event));
+
+    this.on("collisionstart", (event) => this.onCollisionStart(event));
+  }
+
+  pray() {
+    this.playerActions?.actionPray();
   }
 
   pause() {
@@ -179,15 +189,15 @@ export class Player extends ex.Actor {
       this.onPreUpdateMovement(_engine, _delta);
       this.onPreUpdateActionKeys(_engine);
 
-      if (!!this.autoAttack) {
-        const hasMonstersAlive = this.scene.actors.some((d) =>
-          d.hasTag(TAG_MONSTER)
-        );
+      // if (!!this.autoAttack) {
+      //   const hasMonstersAlive = this.scene.actors.some((d) =>
+      //     d.hasTag(TAG_MONSTER)
+      //   );
 
-        if (this.vel.x === 0 && this.vel.y === 0 && hasMonstersAlive) {
-          this.playerActions?.actionShootArrow(this.attackSpeed);
-        }
-      }
+      //   if (this.vel.x === 0 && this.vel.y === 0 && hasMonstersAlive) {
+      //     this.playerActions?.actionShootArrow(this.attackSpeed);
+      //   }
+      // }
     }
 
     // Show the right frames
@@ -243,10 +253,10 @@ export class Player extends ex.Actor {
     }
 
     if (_engine.input.keyboard.wasPressed(POWER_UP_KEY)) {
-      _engine.emit('showPowerUp', () => {});
+      _engine.emit("showPowerUp", () => {});
     }
 
-    if (_engine.input.keyboard.wasPressed(ACTION_2_KEY)) {
+    if (this.hasSlingShot && _engine.input.keyboard.wasPressed(ACTION_2_KEY)) {
       this.playerActions?.actionShootArrow(this.attackSpeed);
       return;
     }
