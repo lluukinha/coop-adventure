@@ -47,7 +47,7 @@ export class PowerUp {
   constructor(_engine: ex.Engine, player: Player) {
     this.engine = _engine;
     this.player = player;
-    document.addEventListener('keyup', this.keyPressBinder);
+    document.addEventListener('keydown', this.keyPressBinder);
   }
 
   show() {

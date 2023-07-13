@@ -1,7 +1,6 @@
 import { TiledMapResource, TiledObject } from '@excaliburjs/plugin-tiled';
 import * as ex from 'excalibur';
 import { Player } from '../actors/players/Player';
-import { Player_CameraStrategy } from '../classes/Player_CameraStrategy';
 import { Floor } from '../actors/Floor';
 import { Monster } from '../actors/monsters/Monster';
 import { Teleport } from '../actors/objects/Teleport';
@@ -18,9 +17,6 @@ export default class GameLevel extends ex.Scene {
 
   onInitialize(_engine: ex.Engine): void {
     this.map.addTiledMapToScene(this);
-    // const layers = this.map.data.getExcaliburObjects();
-    // const objects = layers.flatMap((layer) => layer.objects);
-    // this.buildObjectsOnScene(_engine, objects);
   }
 
   onActivate(_context: ex.SceneActivationContext<unknown>): void {
@@ -40,9 +36,17 @@ export default class GameLevel extends ex.Scene {
         const player = this.actors.find(a => a.hasTag(TAG_ANY_PLAYER)) as Player;
         player.pos.x = object.x;
         player.pos.y = object.y;
-        const cameraStrategy = new Player_CameraStrategy(player, this.map);
-        this.engine.currentScene.camera.addStrategy(cameraStrategy);
-        this.engine.currentScene.camera.zoom = 3;
+        this.engine.currentScene.camera.strategy.lockToActor(player);
+
+        const boundingBox = new ex.BoundingBox(
+          0,
+          0,
+          this.map.data.width * this.map.data.tileWidth,
+          this.map.data.height * this.map.data.tileHeight
+        )
+        this.engine.currentScene.camera.strategy.limitCameraBounds(boundingBox)
+
+        this.engine.currentScene.camera.zoom = 2.3;
       }
 
       if (object.type === 'BoxCollider') {

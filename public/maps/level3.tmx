@@ -9,6 +9,10 @@
  <tileset firstgid="223" source="tilesets/rock.tsx"/>
  <tileset firstgid="225" source="tilesets/watergrass.tsx"/>
  <layer id="3" name="water" width="30" height="20" locked="1">
+ <properties>
+   <property name="excalibur" type="bool" value="true"/>
+   <property name="z" value="0"/>
+  </properties>
   <data encoding="csv">
 47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,
 47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,
@@ -33,6 +37,10 @@
 </data>
  </layer>
  <layer id="1" name="green" width="30" height="20" locked="1">
+ <properties>
+   <property name="excalibur" type="bool" value="true"/>
+   <property name="z" value="0"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -57,6 +65,10 @@
 </data>
  </layer>
  <layer id="2" name="dirt" width="30" height="20" locked="1">
+ <properties>
+   <property name="excalibur" type="bool" value="true"/>
+   <property name="z" value="0"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -81,6 +93,10 @@
 </data>
  </layer>
  <layer id="4" name="objects" width="30" height="20" locked="1">
+ <properties>
+   <property name="excalibur" type="bool" value="true"/>
+   <property name="z" value="0"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,94,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,120,121,121,121,121,121,122,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -105,6 +121,10 @@
 </data>
  </layer>
  <layer id="5" name="Tile Layer 5" width="30" height="20" locked="1">
+ <properties>
+   <property name="excalibur" type="bool" value="true"/>
+   <property name="z" value="2"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,94,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,94,95,96,0,0,0,0,0,

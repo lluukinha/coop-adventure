@@ -1,6 +1,5 @@
 import * as ex from 'excalibur';
 import {
-  ANCHOR_BOTTOM_CENTER,
   DOWN,
   LEFT,
   RIGHT,
@@ -69,11 +68,10 @@ export class Player extends ex.Actor {
       width: 16,
       height: 16,
       scale: SCALE_2x,
-      collider: ex.Shape.Box(32, 35, ANCHOR_BOTTOM_CENTER, new ex.Vector(0, 6)),
+      collider: ex.Shape.Box(20, 15, new ex.Vector(0.5, 0), new ex.Vector(0, 15)),
       collisionType: ex.CollisionType.Active,
-      color: ex.Color.Green,
       visible: false,
-      z: 99,
+      z: 2
     });
 
     this.directionQueue = new DirectionQueue();
@@ -116,11 +114,6 @@ export class Player extends ex.Actor {
   }
 
   onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
-    // Take damage from external things (Enemies, etc)
-    if (event.other.hasTag(TAG_DAMAGES_PLAYER)) {
-      this.takeDamage((event.other as Monster).facing);
-    }
-
     if (event.other.hasTag(TAG_COIN)) {
       this.updateGemsCounter(event.other as Gem);
       // new PowerUp(this.scene.engine);

@@ -23,9 +23,9 @@ export class Gem extends ex.Actor {
       width: 16,
       height: 16,
       scale: SCALE_3x,
-      collider: ex.Shape.Box(3, 3, ANCHOR_CENTER, new ex.Vector(0, 4)),
-      collisionType: ex.CollisionType.Passive,
-      z: 9,
+      collider: ex.Shape.Box(10, 10, ANCHOR_CENTER),
+      collisionType: ex.CollisionType.Active,
+      z: 1,
     });
 
     this.experience = experience;

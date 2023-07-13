@@ -34,6 +34,7 @@ export class Monster extends ex.Actor {
   public hp: number;
   public facing: string;
   public animations: IAnimationPayload;
+  public isAttackingPlayer: boolean = false;
 
   constructor(x: number, y: number) {
     super({
@@ -43,7 +44,7 @@ export class Monster extends ex.Actor {
       scale: SCALE_4x,
       collider: ex.Shape.Box(11, 10, ANCHOR_CENTER, new ex.Vector(0, 4)),
       collisionType: ex.CollisionType.Active,
-      z: 2,
+      z: 1,
     });
 
     this.painState = null;
@@ -54,9 +55,8 @@ export class Monster extends ex.Actor {
     this.facing = DOWN;
     this.animations = generateMonsterAnimations();
 
-    this.on('collisionstart', (event: ex.CollisionStartEvent<ex.Actor>) => {
-      this.onCollisionStart(event);
-    });
+    this.on('collisionstart', (event) => this.onCollisionStart(event));
+    this.on('collisionend', (event) => this.onCollisionEnd(event));
   }
 
   onInitialize(_engine: ex.Engine): void {
@@ -75,6 +75,16 @@ export class Monster extends ex.Actor {
 
       weapon.onDamagedSomething();
       this.takeDamage(weapon.direction);
+    }
+
+    if (event.other.hasTag(TAG_ANY_PLAYER)) {
+      this.isAttackingPlayer = true;
+    }
+  }
+
+  onCollisionEnd(event: ex.CollisionEndEvent<ex.Actor>) {
+    if (event.other.hasTag(TAG_ANY_PLAYER)) {
+      this.isAttackingPlayer = false;
     }
   }
 
@@ -133,6 +143,10 @@ export class Monster extends ex.Actor {
   }
 
   onPostUpdate(_engine: ex.Engine, _delta: number): void {
+    if (this.isAttackingPlayer && !!this.target) {
+      this.target.takeDamage(this.facing);
+    }
+
     this.onPreUpdateMove(_delta);
 
     // Show correct appearance

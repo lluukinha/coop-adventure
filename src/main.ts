@@ -7,15 +7,19 @@ import GameLevel from './scenes/GameLevel';
 import { Player } from './actors/players/Player';
 import { PowerUp } from './classes/PowerUp';
 import { MainMenu } from './scenes/MainMenu';
+// import { DevTool } from '@excaliburjs/dev-tools';
 
 const game = new ex.Engine({
   canvasElementId: 'game',
   width: VIEWPORT_WIDTH * SCALE,
   height: VIEWPORT_HEIGHT * SCALE,
-  displayMode: ex.DisplayMode.FillScreen,
+  displayMode: ex.DisplayMode.FitScreen,
   fixedUpdateFps: 60,
   antialiasing: false, // PIXEL ART
 });
+
+// const devtool = new DevTool(game);
+// devtool.engine.debug.physics.showBroadphaseSpacePartitionDebug = true;
 
 const player = new Player(0, 0, 'HERO');
 game.add(player);

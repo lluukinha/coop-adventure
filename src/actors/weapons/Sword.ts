@@ -81,15 +81,15 @@ export class Sword extends ex.Actor {
   setPosition() {
     if (this.direction === DOWN) {
       this.pos.x -= 5 * SCALE;
-      this.pos.y += 15 * SCALE;
+      this.pos.y += 20 * SCALE;
     } else if (this.direction === UP) {
       this.pos.x += 5 * SCALE;
-      this.pos.y -= 6 * SCALE;
+      this.pos.y -= 10 * SCALE;
     } else if (this.direction === LEFT) {
-      this.pos.x -= 8 * SCALE;
+      this.pos.x -= 15 * SCALE;
       this.pos.y += SCALE;
     } else if (this.direction === RIGHT) {
-      this.pos.x += 8 * SCALE;
+      this.pos.x += 15 * SCALE;
       this.pos.y += SCALE;
     }
   }

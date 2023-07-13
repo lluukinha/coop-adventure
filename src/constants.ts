@@ -10,7 +10,6 @@ export const SCALE_4x = new ex.Vector(SCALE * 2, SCALE * 2);
 
 export const ANCHOR_CENTER = new ex.Vector(0.5, 0.5);
 export const ANCHOR_TOP_LEFT = new ex.Vector(0, 0);
-export const ANCHOR_BOTTOM_CENTER = new ex.Vector(0.5, 0);
 
 export const LEFT = 'LEFT';
 export const RIGHT = 'RIGHT';

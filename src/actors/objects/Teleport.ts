@@ -24,13 +24,15 @@ const ANIMATION_SPEED = 80;
 export class Teleport extends ex.Actor {
   public animations: { [key: string]: ex.Animation };
   public nextLevel: string;
+  public player: Player | null = null;
+
   constructor(x: number, y: number, nextLevel: string) {
     super({
       pos: new ex.Vector(x, y),
       width: 16,
       height: 16,
       scale: SCALE_3x,
-      collider: ex.Shape.Box(3, 3, ANCHOR_CENTER, new ex.Vector(0, 4)),
+      collider: ex.Shape.Box(3, 10, ANCHOR_CENTER, new ex.Vector(0, 4)),
       collisionType: ex.CollisionType.Passive,
       z: 9,
       visible: false,
@@ -65,6 +67,7 @@ export class Teleport extends ex.Actor {
     });
 
     this.animations.disappearing.events.on('end', () => {
+      if (!!this.player) this.player.graphics.visible = false;
       const event = new ex.GameEvent<string, string>();
       event.target = this.nextLevel;
       this.scene.engine.emit('levelup', event);
@@ -92,8 +95,10 @@ export class Teleport extends ex.Actor {
     if (event.other.hasTag(TAG_ANY_PLAYER) && this.graphics.visible) {
       Sounds.teleportSound.play();
       const player = event.other as Player;
-      player.pause();
-      player.graphics.visible = false;
+      this.player = player;
+      this.player.pause();
+      this.player.graphics.opacity = 1;
+      this.player.actions.fade(0, 500);
       this.graphics.use(this.animations.disappearing);
     }
   }

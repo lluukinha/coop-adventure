@@ -25,7 +25,7 @@ export class PlayerPortal extends ex.Actor {
       scale: SCALE_3x,
       collider: ex.Shape.Box(3, 3, ANCHOR_CENTER, new ex.Vector(0, 4)),
       collisionType: ex.CollisionType.Passive,
-      z: 9,
+      z: 1,
       visible: true,
     });
 
@@ -48,13 +48,9 @@ export class PlayerPortal extends ex.Actor {
   }
 
   onInitialize(_engine: ex.Engine): void {
+    const player = this.scene.actors.find((a) => a.hasTag(TAG_ANY_PLAYER)) as Player;
     this.animations.appearing.events.on('end', () => {
-      const player = this.scene.actors.find((a) =>
-        a.hasTag(TAG_ANY_PLAYER)
-      ) as Player;
-      player.actions.fade(1, 1000);
       player.resume();
-      player.graphics.visible = true;
       this.graphics.use(this.animations.disappearing);
     });
 
@@ -63,5 +59,8 @@ export class PlayerPortal extends ex.Actor {
     });
 
     this.graphics.use(this.animations.appearing);
+    player.graphics.opacity = 0;
+    player.graphics.visible = true;
+    player.actions.fade(1, 1000);
   }
 }

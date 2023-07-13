@@ -13,6 +13,7 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "@excaliburjs/dev-tools": "^0.27.1",
     "@excaliburjs/plugin-tiled": "^0.27.0",
     "excalibur": "^0.27.0"
   }

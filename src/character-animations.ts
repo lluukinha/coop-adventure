@@ -79,8 +79,8 @@ const HERO_ANIMATION_CONFIGS: IAnimationConfig = {
     },
     [UP]: {
         WALK: { frames: [104, 105,106,107,108,109,110,111,112], speed: WALK_ANIM_SPEED },
-        SWORD1: { frames: [158], speed: WALK_ANIM_SPEED },
-        SWORD2: { frames: [161], speed: WALK_ANIM_SPEED },
+        SWORD1: { frames: [161], speed: WALK_ANIM_SPEED },
+        SWORD2: { frames: [158], speed: WALK_ANIM_SPEED },
         ARROW1: { frames: [212], speed: WALK_ANIM_SPEED },
         ARROW2: { frames: [216], speed: WALK_ANIM_SPEED },
         PAIN: { frames: [14], speed: WALK_ANIM_SPEED }
