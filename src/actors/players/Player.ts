@@ -6,7 +6,6 @@ import {
   SCALE_2x,
   TAG_ANY_PLAYER,
   TAG_COIN,
-  TAG_MONSTER,
   TAG_PLAYER_GEMS,
   TAG_PLAYER_HUD,
   UP,
@@ -25,7 +24,6 @@ import { Gem } from "../Gem";
 import { PlayerPowerUps } from "../../powerUps/powerUps";
 import { PlayerGems } from "../../hud/PlayerGems";
 import { PlayerGemsQuantity } from "../../hud/PlayerGemsQuantity";
-import { PowerUp } from "../../classes/PowerUp";
 
 const ACTION_1_KEY = ex.Input.Keys.Z;
 const ACTION_2_KEY = ex.Input.Keys.X;

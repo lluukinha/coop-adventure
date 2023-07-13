@@ -1,13 +1,6 @@
 import { IFrameAnimation } from "../../character-animations";
 import { SpriteSequence } from "../../classes/SpriteSequence";
-import {
-  ARROW1,
-  ARROW2,
-  ARROWACTION,
-  SWORD1,
-  SWORD2,
-  SWORDACTION,
-} from "../../constants";
+import { ARROWACTION, SWORD1, SWORD2, SWORDACTION } from "../../constants";
 import { Arrow } from "../weapons/Arrow";
 import {
   SWORD_SWING_1,
