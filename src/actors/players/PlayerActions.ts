@@ -1,6 +1,18 @@
+import { Collider, CollisionType } from "excalibur";
 import { IFrameAnimation } from "../../character-animations";
 import { SpriteSequence } from "../../classes/SpriteSequence";
-import { ARROWACTION, SWORD1, SWORD2, SWORDACTION } from "../../constants";
+import {
+  ARROWACTION,
+  DASH,
+  DASHACTION,
+  DOWN,
+  LEFT,
+  RIGHT,
+  SWORD1,
+  SWORD2,
+  SWORDACTION,
+  UP,
+} from "../../constants";
 import { Arrow } from "../weapons/Arrow";
 import {
   SWORD_SWING_1,
@@ -17,6 +29,44 @@ export class PlayerActions {
   constructor(actor: Player) {
     this.actor = actor;
     this.engine = actor.scene.engine;
+  }
+
+  dashActor(player: Player) {
+    const positions = 20;
+    if (player.facing === DOWN) {
+      player.pos.y += positions;
+    }
+    if (player.facing === UP) {
+      player.pos.y -= positions;
+    }
+    if (player.facing === RIGHT) {
+      player.pos.x += positions;
+    }
+    if (player.facing === LEFT) {
+      player.pos.x -= positions;
+    }
+  }
+
+  async actionDash() {
+    const { actor } = this;
+
+    if (actor.vel.x + actor.vel.y === 0) return;
+
+    actor.isPainFlashing = true;
+
+    const dashFrames = actor.skinAnimations[actor.facing][DASH].frames.map(
+      (frame) => ({
+        frame: frame.graphic,
+        duration: frame.duration,
+        actorObjCallback: () => this.dashActor(actor),
+      })
+    ) as unknown as IFrameAnimation[];
+
+    actor.actionAnimation = new SpriteSequence(DASHACTION, dashFrames, () => {
+      // Clear out dedicated animation when this series is complete
+      actor.actionAnimation = null;
+      actor.isPainFlashing = false;
+    });
   }
 
   actionSwingSword() {

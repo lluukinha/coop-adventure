@@ -5,8 +5,6 @@ import {
   RIGHT,
   SCALE_2x,
   TAG_ANY_PLAYER,
-  TAG_COIN,
-  TAG_PLAYER_GEMS,
   TAG_PLAYER_HUD,
   UP,
   WALK,
@@ -20,7 +18,6 @@ import { PlayerAnimations } from "./PlayerAnimations";
 import { SpriteSequence } from "../../classes/SpriteSequence";
 import { DirectionQueue } from "../../classes/DirectionQueue";
 import { PlayerActions } from "./PlayerActions";
-import { Gem } from "../Gem";
 import { PlayerPowerUps } from "../../powerUps/powerUps";
 import { PlayerGems } from "../../hud/PlayerGems";
 import { PlayerGemsQuantity } from "../../hud/PlayerGemsQuantity";
@@ -28,6 +25,7 @@ import { PlayerGemsQuantity } from "../../hud/PlayerGemsQuantity";
 const ACTION_1_KEY = ex.Input.Keys.Z;
 const ACTION_2_KEY = ex.Input.Keys.X;
 const POWER_UP_KEY = ex.Input.Keys.P;
+const DASH_KEY = ex.Input.Keys.C;
 
 const PLAYERS = [
   { key: ex.Input.Keys.Digit1, skinId: "RED" },
@@ -85,8 +83,6 @@ export class Player extends ex.Actor {
     this.graphics.use(this.skinAnimations[this.facing][WALK]);
     this.isPainFlashing = false;
     this.painState = null;
-
-    this.on("collisionstart", (event) => this.onCollisionStart(event));
   }
 
   pray() {
@@ -119,25 +115,6 @@ export class Player extends ex.Actor {
     this.playerAnimations = new PlayerAnimations(this);
     this.playerActions = new PlayerActions(this);
     this.addTag(TAG_ANY_PLAYER);
-  }
-
-  onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
-    if (event.other.hasTag(TAG_COIN)) {
-      this.updateGemsCounter(event.other as Gem);
-      // new PowerUp(this.scene.engine);
-    }
-  }
-
-  updateGemsCounter(gem: Gem) {
-    gem.sound.play();
-    this.experience += gem.experience;
-    this.gems += 1;
-    gem.kill();
-
-    const gemCounter = this.scene.actors.find((a) =>
-      a.hasTag(TAG_PLAYER_GEMS)
-    ) as PlayerGemsQuantity;
-    gemCounter.updateQuantity(this.gems);
   }
 
   calculateOppositeDirection(direction: string): string {
@@ -186,16 +163,6 @@ export class Player extends ex.Actor {
     if (!this.actionAnimation) {
       this.onPreUpdateMovement(_engine, _delta);
       this.onPreUpdateActionKeys(_engine);
-
-      // if (!!this.autoAttack) {
-      //   const hasMonstersAlive = this.scene.actors.some((d) =>
-      //     d.hasTag(TAG_MONSTER)
-      //   );
-
-      //   if (this.vel.x === 0 && this.vel.y === 0 && hasMonstersAlive) {
-      //     this.playerActions?.actionShootArrow(this.attackSpeed);
-      //   }
-      // }
     }
 
     // Show the right frames
@@ -217,18 +184,21 @@ export class Player extends ex.Actor {
     }
 
     const keyboard = _engine.input.keyboard;
-
     this.vel.x = 0;
     this.vel.y = 0;
+
     if (keyboard.isHeld(ex.Input.Keys.Left)) {
       this.vel.x = -1;
     }
+
     if (keyboard.isHeld(ex.Input.Keys.Right)) {
       this.vel.x = 1;
     }
+
     if (keyboard.isHeld(ex.Input.Keys.Up)) {
       this.vel.y = -1;
     }
+
     if (keyboard.isHeld(ex.Input.Keys.Down)) {
       this.vel.y = 1;
     }
@@ -248,6 +218,10 @@ export class Player extends ex.Actor {
     if (_engine.input.keyboard.wasPressed(ACTION_1_KEY)) {
       this.playerActions?.actionSwingSword();
       return;
+    }
+
+    if (_engine.input.keyboard.wasPressed(DASH_KEY)) {
+      this.playerActions?.actionDash();
     }
 
     if (_engine.input.keyboard.wasPressed(POWER_UP_KEY)) {

@@ -1,7 +1,7 @@
-import * as ex from 'excalibur';
-import { SCALE_4x } from '../constants.js';
-import { Images } from '../resources.js';
-import { Gem } from './Gem.js';
+import * as ex from "excalibur";
+import { SCALE_4x } from "../constants.js";
+import { Images } from "../resources.js";
+import { Gem } from "./Gem.js";
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Images.explosionSheetImage,
@@ -22,7 +22,7 @@ export class Explosion extends ex.Actor {
       width: 32,
       height: 32,
       scale: SCALE_4x,
-      z: 99
+      z: 99,
     });
 
     // Do the animation, then remove instance after it's done
@@ -32,11 +32,11 @@ export class Explosion extends ex.Actor {
       EXPLOSION_ANIMATION_SPEED
     );
     explodeAnimation.strategy = ex.AnimationStrategy.End;
-    this.graphics.add('explode', explodeAnimation);
+    this.graphics.add("explode", explodeAnimation);
     this.graphics.use(explodeAnimation);
-    explodeAnimation.events.on('end', () => {
+    explodeAnimation.events.on("end", () => {
       this.kill();
-      const gem = new Gem(this.pos.x, this.pos.y, 50);
+      const gem = new Gem(this.pos.x, this.pos.y, 1);
       this.scene.engine.add(gem);
     });
   }

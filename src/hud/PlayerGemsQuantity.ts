@@ -1,6 +1,6 @@
-import * as ex from 'excalibur';
-import { Images } from '../resources';
-import { TAG_PLAYER_GEMS, TAG_PLAYER_HUD } from '../constants';
+import * as ex from "excalibur";
+import { Images } from "../resources";
+import { TAG_PLAYER_GEMS, TAG_PLAYER_HUD } from "../constants";
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Images.fontImage,
@@ -13,34 +13,40 @@ const spriteSheet = ex.SpriteSheet.fromImageSource({
 });
 
 const spriteFont = new ex.SpriteFont({
-  alphabet: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ,!\'&."?-()+ ',
+  alphabet: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ,!'&.\"?-()+ ",
   caseInsensitive: true,
   spriteSheet: spriteSheet,
   spacing: -6,
 });
 
+const MAX_QUANTITY = 99999;
+
 export class PlayerGemsQuantity extends ex.ScreenElement {
-  gems: string | number;
+  gems: number;
   constructor(gems: number) {
     super({
-      x: 70,
-      y: 25,
+      y: 20,
       scale: new ex.Vector(3, 3),
-      z: 99
+      z: 99,
     });
     this.gems = gems;
   }
 
-  updateQuantity(newText: string | number) {
+  updateQuantity(increment: number) {
+    const newNumber =
+      this.gems + increment >= MAX_QUANTITY
+        ? MAX_QUANTITY
+        : this.gems + increment;
     const text = new ex.Text({
-      text: `${newText}`,
+      text: `${newNumber}`,
       font: spriteFont,
     });
-    this.gems = newText;
+    this.gems = newNumber;
     this.graphics.use(text);
   }
 
-  onInitialize() {
+  onInitialize(_engine: ex.Engine) {
+    this.pos.x = _engine.canvas.width - 180;
     this.addTag(TAG_PLAYER_GEMS);
     this.addTag(TAG_PLAYER_HUD);
     this.updateQuantity(this.gems);

@@ -21,10 +21,14 @@ export const SWORD1 = "SWORD1";
 export const SWORD2 = "SWORD2";
 export const ARROW1 = "ARROW1";
 export const ARROW2 = "ARROW2";
+export const SHOOT = "SHOOT";
+export const PRAY = "PRAY";
+export const DASH = "DASH";
 export const PAIN = "PAIN";
 
 export const SWORDACTION = "SWORDACTION";
 export const ARROWACTION = "ARROWACTION";
+export const DASHACTION = "DASHACTION";
 
 export const TAG_ANY_PLAYER = "TAG_ANY_PLAYER";
 export const TAG_MONSTER_ROAM_POINT = "TAG_MONSTER_ROAM_POINT";

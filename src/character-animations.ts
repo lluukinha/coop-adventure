@@ -3,10 +3,13 @@ import { Images } from "./resources";
 import {
   ARROW1,
   ARROW2,
+  DASH,
   DOWN,
   LEFT,
   PAIN,
+  PRAY,
   RIGHT,
+  SHOOT,
   SWORD1,
   SWORD2,
   UP,
@@ -34,6 +37,7 @@ export interface IPainState {
 }
 
 const WALK_ANIM_SPEED = 50;
+const DASH_ANIM_SPEED = 30;
 const charSpritesheetGridConfig = {
   columns: 10,
   rows: 10,
@@ -96,6 +100,13 @@ const HERO_ANIMATION_CONFIGS: IAnimationConfig = {
     },
     PAIN: { frames: [130], speed: WALK_ANIM_SPEED },
     PRAY: { frames: [26, 27, 28, 29, 30, 31, 32], speed: WALK_ANIM_SPEED },
+    DASH: {
+      frames: [
+        262, 263, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264,
+        264,
+      ],
+      speed: DASH_ANIM_SPEED,
+    },
   },
   [UP]: {
     WALK: {
@@ -112,6 +123,13 @@ const HERO_ANIMATION_CONFIGS: IAnimationConfig = {
     },
     PAIN: { frames: [104], speed: WALK_ANIM_SPEED },
     PRAY: { frames: [0, 1, 2, 3, 4, 5, 6], speed: WALK_ANIM_SPEED },
+    DASH: {
+      frames: [
+        262, 263, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264,
+        264,
+      ],
+      speed: DASH_ANIM_SPEED,
+    },
   },
   [LEFT]: {
     WALK: {
@@ -128,6 +146,13 @@ const HERO_ANIMATION_CONFIGS: IAnimationConfig = {
     },
     PAIN: { frames: [117], speed: WALK_ANIM_SPEED },
     PRAY: { frames: [13, 14, 15, 16, 17, 18, 19], speed: WALK_ANIM_SPEED },
+    DASH: {
+      frames: [
+        262, 263, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264,
+        264,
+      ],
+      speed: DASH_ANIM_SPEED,
+    },
   },
   [RIGHT]: {
     WALK: {
@@ -144,6 +169,13 @@ const HERO_ANIMATION_CONFIGS: IAnimationConfig = {
     },
     PAIN: { frames: [143], speed: WALK_ANIM_SPEED },
     PRAY: { frames: [39, 40, 41, 42, 43, 44, 45], speed: WALK_ANIM_SPEED },
+    DASH: {
+      frames: [
+        262, 263, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264,
+        264,
+      ],
+      speed: DASH_ANIM_SPEED,
+    },
   },
 };
 
@@ -195,7 +227,7 @@ export const generateCharacterAnimations = (spriteSheetKey: string) => {
   const payload: IAnimationPayload = {};
   [UP, DOWN, LEFT, RIGHT].forEach((direction: string) => {
     payload[direction] = {};
-    [WALK, SWORD1, SWORD2, ARROW1, ARROW2, "SHOOT", "PRAY", PAIN].forEach(
+    [WALK, SWORD1, SWORD2, ARROW1, ARROW2, SHOOT, PRAY, DASH, PAIN].forEach(
       (pose: string) => {
         const config =
           spriteSheetKey === "HERO"

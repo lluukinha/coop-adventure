@@ -1,6 +1,14 @@
 import * as ex from "excalibur";
 import { Images, Sounds } from "../resources.js";
-import { ANCHOR_CENTER, SCALE_3x, TAG_COIN } from "../constants.js";
+import {
+  ANCHOR_CENTER,
+  SCALE_3x,
+  TAG_ANY_PLAYER,
+  TAG_COIN,
+  TAG_PLAYER_GEMS,
+} from "../constants.js";
+import { Player } from "./players/Player.js";
+import { PlayerGemsQuantity } from "../hud/PlayerGemsQuantity.js";
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Images.blueGemSheetImage,
@@ -16,8 +24,8 @@ const ANIMATION_SPEED = 80;
 
 export class Gem extends ex.Actor {
   sound: ex.Sound;
-  experience: number;
-  constructor(x: number, y: number, experience: number) {
+  value: number;
+  constructor(x: number, y: number, value: number) {
     super({
       pos: new ex.Vector(x, y),
       width: 16,
@@ -28,7 +36,7 @@ export class Gem extends ex.Actor {
       z: 1,
     });
 
-    this.experience = experience;
+    this.value = value;
     this.sound = Sounds.coinSound;
 
     // Do the animation, then remove instance after it's done
@@ -41,5 +49,25 @@ export class Gem extends ex.Actor {
     this.graphics.add("gem", animation);
     this.graphics.use(animation);
     this.addTag(TAG_COIN);
+
+    this.on("collisionstart", (event) => this.onCollisionStart(event));
+  }
+
+  onCollisionStart(event: ex.CollisionStartEvent) {
+    if (event.other.hasTag(TAG_ANY_PLAYER)) {
+      const player = event.other as Player;
+      this.updateGemsCounter(player);
+    }
+  }
+
+  updateGemsCounter(player: Player) {
+    this.sound.play();
+    player.gems += this.value;
+
+    const gemHudCounter = this.scene.actors.find((a) =>
+      a.hasTag(TAG_PLAYER_GEMS)
+    ) as PlayerGemsQuantity;
+    gemHudCounter.updateQuantity(this.value);
+    this.kill();
   }
 }
