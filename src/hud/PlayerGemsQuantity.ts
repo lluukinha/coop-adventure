@@ -1,6 +1,6 @@
-import * as ex from "excalibur";
-import { Images } from "../resources";
-import { TAG_PLAYER_GEMS, TAG_PLAYER_HUD } from "../constants";
+import * as ex from 'excalibur';
+import { Images } from '../resources';
+import { TAG_PLAYER_GEMS, TAG_PLAYER_HUD, VIEWPORT_WIDTH } from '../constants';
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Images.fontImage,
@@ -13,7 +13,7 @@ const spriteSheet = ex.SpriteSheet.fromImageSource({
 });
 
 const spriteFont = new ex.SpriteFont({
-  alphabet: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ,!'&.\"?-()+ ",
+  alphabet: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ,!\'&."?-()+ ',
   caseInsensitive: true,
   spriteSheet: spriteSheet,
   spacing: -6,
@@ -25,6 +25,7 @@ export class PlayerGemsQuantity extends ex.ScreenElement {
   gems: number;
   constructor(gems: number) {
     super({
+      x: VIEWPORT_WIDTH - 180,
       y: 20,
       scale: new ex.Vector(3, 3),
       z: 99,
@@ -46,7 +47,6 @@ export class PlayerGemsQuantity extends ex.ScreenElement {
   }
 
   onInitialize(_engine: ex.Engine) {
-    this.pos.x = _engine.canvas.width - 180;
     this.addTag(TAG_PLAYER_GEMS);
     this.addTag(TAG_PLAYER_HUD);
     this.updateQuantity(this.gems);

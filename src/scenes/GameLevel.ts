@@ -1,12 +1,12 @@
-import { TiledMapResource, TiledObject } from "@excaliburjs/plugin-tiled";
-import * as ex from "excalibur";
-import { Player } from "../actors/players/Player";
-import { Floor } from "../actors/Floor";
-import { Monster } from "../actors/monsters/Monster";
-import { Teleport } from "../actors/objects/Teleport";
-import { TAG_ANY_PLAYER } from "../constants";
-import { PlayerPortal } from "../actors/objects/PlayerPortal";
-import { Bible } from "../actors/objects/Bible";
+import { TiledMapResource, TiledObject } from '@excaliburjs/plugin-tiled';
+import * as ex from 'excalibur';
+import { Player } from '../actors/players/Player';
+import { Floor } from '../actors/Floor';
+import { Monster } from '../actors/monsters/Monster';
+import { Teleport } from '../actors/objects/Teleport';
+import { TAG_ANY_PLAYER } from '../constants';
+import { PlayerPortal } from '../actors/objects/PlayerPortal';
+import { Bible } from '../actors/objects/Bible';
 
 export default class GameLevel extends ex.Scene {
   public map: TiledMapResource;
@@ -21,6 +21,13 @@ export default class GameLevel extends ex.Scene {
   }
 
   onActivate(_context: ex.SceneActivationContext<unknown>): void {
+    if (!!_context.data) {
+      const objects = _context.data as ex.Actor[];
+      for (let i = 0; i < objects.length; i++) {
+        this.add(objects[i]);
+      }
+    }
+
     const layers = this.map.data.getExcaliburObjects();
     const objects = layers.flatMap((layer) => layer.objects);
     this.buildObjectsOnScene(_context.engine, objects);
@@ -31,7 +38,7 @@ export default class GameLevel extends ex.Scene {
     for (let index = 0; index < objects.length; index++) {
       const object = objects[index] as TiledObject;
 
-      if (object.type === "Player") {
+      if (object.type === 'Player') {
         const portal = new PlayerPortal(object.x, object.y);
         _engine.add(portal);
         const player = this.actors.find((a) =>
@@ -52,7 +59,7 @@ export default class GameLevel extends ex.Scene {
         this.engine.currentScene.camera.zoom = 2.3;
       }
 
-      if (object.type === "BoxCollider") {
+      if (object.type === 'BoxCollider') {
         const collider = new Floor(
           object.x,
           object.y,
@@ -62,20 +69,20 @@ export default class GameLevel extends ex.Scene {
         _engine.add(collider);
       }
 
-      if (object.type === "Monster") {
+      if (object.type === 'Monster') {
         const monster = new Monster(object.x, object.y);
         _engine.add(monster);
       }
 
-      if (object.type === "Teleport") {
+      if (object.type === 'Teleport') {
         const direction: string = object.properties.find(
-          (p) => p.name === "direction"
+          (p) => p.name === 'direction'
         )!.value as string;
         const teleport = new Teleport(object.x, object.y, direction);
         _engine.add(teleport);
       }
 
-      if (object.type === "Bible") {
+      if (object.type === 'Bible') {
         const bible = new Bible(object.x, object.y);
         _engine.add(bible);
       }

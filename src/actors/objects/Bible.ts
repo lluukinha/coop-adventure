@@ -1,13 +1,12 @@
-import * as ex from "excalibur";
-import { Images } from "../../resources.js";
+import * as ex from 'excalibur';
+import { Images } from '../../resources.js';
 import {
   ANCHOR_CENTER,
   SCALE_2x,
   TAG_ANY_PLAYER,
   TAG_MONSTER,
   TAG_POWERUP,
-} from "../../constants.js";
-import { Player } from "../players/Player.js";
+} from '../../constants.js';
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Images.bibleSheetImage,
@@ -40,14 +39,14 @@ export class Bible extends ex.Actor {
       ANIMATION_SPEED
     );
     animation.strategy = ex.AnimationStrategy.Loop;
-    this.graphics.add("bible", animation);
+    this.graphics.add('bible', animation);
     this.graphics.use(animation);
 
     this.graphics.opacity = 0;
 
     this.addTag(TAG_POWERUP);
 
-    this.on("collisionstart", (event) => this.onCollisionStart(event));
+    this.on('collisionstart', (event) => this.onCollisionStart(event));
   }
 
   onPostUpdate(_engine: ex.Engine, _delta: number): void {
@@ -64,8 +63,7 @@ export class Bible extends ex.Actor {
 
   onCollisionStart(event: ex.CollisionStartEvent<ex.Actor>) {
     if (event.other.hasTag(TAG_ANY_PLAYER) && this.graphics.visible) {
-      const player = event.other as Player;
-      player.pray();
+      this.scene.engine.emit('showPowerUp', () => {});
       this.kill();
     }
   }

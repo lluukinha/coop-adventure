@@ -1,26 +1,24 @@
-import * as ex from "excalibur";
+import * as ex from 'excalibur';
 import {
   DOWN,
   LEFT,
   RIGHT,
   SCALE_2x,
   TAG_ANY_PLAYER,
-  TAG_PLAYER_HUD,
   UP,
   WALK,
-} from "../../constants";
+} from '../../constants';
 import {
   IAnimationPayload,
   IPainState,
   generateCharacterAnimations,
-} from "../../character-animations";
-import { PlayerAnimations } from "./PlayerAnimations";
-import { SpriteSequence } from "../../classes/SpriteSequence";
-import { DirectionQueue } from "../../classes/DirectionQueue";
-import { PlayerActions } from "./PlayerActions";
-import { PlayerPowerUps } from "../../powerUps/powerUps";
-import { PlayerGems } from "../../hud/PlayerGems";
-import { PlayerGemsQuantity } from "../../hud/PlayerGemsQuantity";
+} from '../../character-animations';
+import { PlayerAnimations } from './PlayerAnimations';
+import { SpriteSequence } from '../../classes/SpriteSequence';
+import { DirectionQueue } from '../../classes/DirectionQueue';
+import { PlayerActions } from './PlayerActions';
+import { PlayerPowerUps } from '../../powerUps/powerUps';
+import { PowerUp } from '../../classes/PowerUp';
 
 const ACTION_1_KEY = ex.Input.Keys.Z;
 const ACTION_2_KEY = ex.Input.Keys.X;
@@ -28,11 +26,11 @@ const POWER_UP_KEY = ex.Input.Keys.P;
 const DASH_KEY = ex.Input.Keys.C;
 
 const PLAYERS = [
-  { key: ex.Input.Keys.Digit1, skinId: "RED" },
-  { key: ex.Input.Keys.Digit2, skinId: "BLUE" },
-  { key: ex.Input.Keys.Digit3, skinId: "GRAY" },
-  { key: ex.Input.Keys.Digit4, skinId: "YELLOW" },
-  { key: ex.Input.Keys.Digit5, skinId: "HERO" },
+  { key: ex.Input.Keys.Digit1, skinId: 'RED' },
+  { key: ex.Input.Keys.Digit2, skinId: 'BLUE' },
+  { key: ex.Input.Keys.Digit3, skinId: 'GRAY' },
+  { key: ex.Input.Keys.Digit4, skinId: 'YELLOW' },
+  { key: ex.Input.Keys.Digit5, skinId: 'HERO' },
 ];
 
 export class Player extends ex.Actor {
@@ -49,7 +47,6 @@ export class Player extends ex.Actor {
   public experience: number = 0;
   public gems: number = 0;
   public canMove: boolean = true;
-  public isShowingHud: boolean = false;
   public hasSlingShot: boolean = true;
 
   // power ups will manipulate this variables below
@@ -85,8 +82,8 @@ export class Player extends ex.Actor {
     this.painState = null;
   }
 
-  pray() {
-    this.playerActions?.actionPray();
+  pray(powerUpScreen: PowerUp) {
+    this.playerActions?.actionPray(powerUpScreen);
   }
 
   pause() {
@@ -97,18 +94,6 @@ export class Player extends ex.Actor {
 
   resume() {
     this.canMove = true;
-  }
-
-  showDetailsOnScene() {
-    this.scene.add(new PlayerGems());
-    this.scene.add(new PlayerGemsQuantity(this.gems));
-    this.isShowingHud = true;
-  }
-
-  removeDetailsFromScene() {
-    const elements = this.scene.actors.filter((a) => a.hasTag(TAG_PLAYER_HUD));
-    elements.forEach((el) => el.kill());
-    this.isShowingHud = false;
   }
 
   onInitialize(_engine: ex.Engine): void {
@@ -147,29 +132,22 @@ export class Player extends ex.Actor {
   }
 
   onPostUpdate(_engine: ex.Engine, _delta: number): void {
-    if (!this.isShowingHud && this.graphics.visible) {
-      this.showDetailsOnScene();
-    }
-
-    if (!!this.isShowingHud && !this.graphics.visible) {
-      this.removeDetailsFromScene();
-    }
-
+    if (!this.graphics.visible) return;
     this.directionQueue.update(_engine);
 
     // Work on dedicated animation if we are doing one
     this.playerAnimations?.progressThroughActionAnimation(_delta);
 
     if (!this.actionAnimation) {
-      this.onPreUpdateMovement(_engine, _delta);
-      this.onPreUpdateActionKeys(_engine);
+      this.updateMovement(_engine, _delta);
+      this.updateActionKeys(_engine);
     }
 
     // Show the right frames
     this.playerAnimations?.showRelevantAnimation();
   }
 
-  onPreUpdateMovement(_engine: ex.Engine, _delta: number): void {
+  updateMovement(_engine: ex.Engine, _delta: number): void {
     if (!this.canMove) return;
     if (!!this.painState) {
       this.vel.x = this.painState.painVelX;
@@ -213,7 +191,7 @@ export class Player extends ex.Actor {
     this.facing = this.directionQueue.direction ?? this.facing;
   }
 
-  onPreUpdateActionKeys(_engine: ex.Engine) {
+  updateActionKeys(_engine: ex.Engine) {
     // Register action keys
     if (_engine.input.keyboard.wasPressed(ACTION_1_KEY)) {
       this.playerActions?.actionSwingSword();
@@ -225,7 +203,7 @@ export class Player extends ex.Actor {
     }
 
     if (_engine.input.keyboard.wasPressed(POWER_UP_KEY)) {
-      _engine.emit("showPowerUp", () => {});
+      _engine.emit('showPowerUp', () => {});
     }
 
     if (this.hasSlingShot && _engine.input.keyboard.wasPressed(ACTION_2_KEY)) {

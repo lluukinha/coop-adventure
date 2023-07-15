@@ -1,4 +1,5 @@
 import * as ex from 'excalibur';
+
 /**
  * Our main menu scene, which will have HTML-based UI
  */
@@ -25,13 +26,29 @@ export class MainMenu extends ex.Scene {
     // Handle the DOM click event
     btnStart.onclick = (e) => {
       e.preventDefault();
-
-      // Transition the game to the new scene
-      this.engine.emit('startGame', () => {});
+      this.startGame();
     };
 
     // Append the <button /> to our `ui` container
     this.ui.appendChild(btnStart);
+  }
+
+  onPostUpdate(_engine: ex.Engine, _delta: number): void {
+    this.updateActionKeys(_engine);
+  }
+
+  updateActionKeys(_engine: ex.Engine) {
+    if (
+      _engine.input.keyboard.wasPressed(ex.Input.Keys.Z) ||
+      _engine.input.keyboard.wasPressed(ex.Input.Keys.Enter)
+    ) {
+      this.startGame();
+    }
+  }
+
+  startGame() {
+    // Transition the game to the new scene
+    this.engine.emit('startGame', () => {});
   }
 
   onDeactivate() {

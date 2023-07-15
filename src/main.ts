@@ -7,6 +7,8 @@ import GameLevel from './scenes/GameLevel';
 import { Player } from './actors/players/Player';
 import { PowerUp } from './classes/PowerUp';
 import { MainMenu } from './scenes/MainMenu';
+import { PlayerGems } from './hud/PlayerGems';
+import { PlayerGemsQuantity } from './hud/PlayerGemsQuantity';
 // import { DevTool } from '@excaliburjs/dev-tools';
 
 const game = new ex.Engine({
@@ -24,10 +26,16 @@ const game = new ex.Engine({
 const player = new Player(0, 0, 'HERO');
 game.add(player);
 
+// HUD Elements
+const playerGems = new PlayerGems();
+const playerGemsQuantity = new PlayerGemsQuantity(player.gems);
+game.add(playerGems);
+game.add(playerGemsQuantity);
+
 const powerUpScreen = new PowerUp(game, player);
 
 game.on('showPowerUp', () => {
-  powerUpScreen.show();
+  player.pray(powerUpScreen);
 });
 
 const mainMenu = new MainMenu(game);
@@ -40,18 +48,16 @@ const level3 = new GameLevel(Maps.tiledMap3 as TiledMapResource);
 game.add('level3', level3);
 
 game.on('levelup', (event: ex.GameEvent<string>) => {
-  level1.remove(player);
-  eval(event.target).add(player);
-  game.goToScene(event.target);
+  game.currentScene.remove(player);
+  const objects = [player, playerGems, playerGemsQuantity];
+  game.goToScene(event.target, objects);
 });
 
 game.add(player);
 game.on('startGame', () => {
   mainMenu.remove(player);
-  // level1.add(player);
-  // game.goToScene('level1');
-  level3.add(player);
-  game.goToScene('level3');
+  const objects = [player, playerGems, playerGemsQuantity];
+  game.goToScene('level3', objects);
 });
 
 mainMenu.add(player);

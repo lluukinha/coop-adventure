@@ -1,6 +1,5 @@
-import { Collider, CollisionType } from "excalibur";
-import { IFrameAnimation } from "../../character-animations";
-import { SpriteSequence } from "../../classes/SpriteSequence";
+import { IFrameAnimation } from '../../character-animations';
+import { SpriteSequence } from '../../classes/SpriteSequence';
 import {
   ARROWACTION,
   DASH,
@@ -12,15 +11,16 @@ import {
   SWORD2,
   SWORDACTION,
   UP,
-} from "../../constants";
-import { Arrow } from "../weapons/Arrow";
+} from '../../constants';
+import { Arrow } from '../weapons/Arrow';
 import {
   SWORD_SWING_1,
   SWORD_SWING_2,
   SWORD_SWING_3,
   Sword,
-} from "../weapons/Sword";
-import { Player } from "./Player";
+} from '../weapons/Sword';
+import { Player } from './Player';
+import { PowerUp } from '../../classes/PowerUp';
 
 export class PlayerActions {
   public actor: Player;
@@ -115,13 +115,13 @@ export class PlayerActions {
     actor.actionAnimation.actorObject = sword;
   }
 
-  actionPray() {
-    const { actor, engine } = this;
+  actionPray(powerUpScreen: PowerUp) {
+    const { actor } = this;
 
     const prayFrames = actor.skinAnimations[actor.facing].PRAY.frames.map(
       (frame, index) => {
         const finishPray = () => {
-          engine.emit("showPowerUp", () => {});
+          powerUpScreen.show();
         };
 
         return {
